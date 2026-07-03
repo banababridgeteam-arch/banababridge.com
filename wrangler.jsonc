@@ -7,5 +7,11 @@
     "directory": "./dist",
     // 없는 경로는 우리 404 페이지로 (soft-404 방지)
     "not_found_handling": "404-page"
-  }
+  },
+  // 도메인이 이 Cloudflare 계정에 있으므로 바로 커스텀 도메인으로 배포
+  // (workers.dev 서브도메인 등록 불필요). www가 에러나면 그 줄만 지우세요.
+  "routes": [
+    { "pattern": "banababridge.com", "custom_domain": true },
+    { "pattern": "www.banababridge.com", "custom_domain": true }
+  ]
 }
