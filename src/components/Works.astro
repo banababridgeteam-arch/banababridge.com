@@ -24,7 +24,7 @@ const rest = works.filter((w) => !w.featured);
 <section class="section" id="work">
   <div class="container">
     <p class="index-label reveal"><span class="num">02</span><span class="txt">{t.work.label}</span></p>
-    <h2 class="display h-lg reveal">{t.work.head}</h2>
+    <h2 class="display h-lg reveal mask-head"><span class="ml"><span>{t.work.head}</span></span></h2>
 
     {featured && (
       <article class="featured reveal">

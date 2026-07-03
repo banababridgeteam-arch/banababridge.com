@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE } from '../config';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
+import heroImg from '../assets/brand/hero-connection.png';
 
 interface Props { lang?: Lang }
 const { lang = defaultLang } = Astro.props;
@@ -8,24 +10,38 @@ const t = useTranslations(lang);
 ---
 
 <section class="hero" id="top">
-  <div class="hero-bg" aria-hidden="true"></div>
-  <canvas id="bridge-canvas" aria-hidden="true"></canvas>
-  <div class="hero-veil" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
 
   <div class="container hero-inner">
-    <p class="hero-badge reveal">{t.hero.badge}</p>
-    <h1 class="display h-xl hero-title reveal">
-      <span>{t.hero.line1}</span>
-      <span>{t.hero.line2}</span>
-    </h1>
-    <p class="lead hero-sub reveal">{t.hero.sub}</p>
-    <div class="hero-cta reveal">
-      {SITE.phone ? (
-        <a class="btn btn-gold" href={`tel:${SITE.phone}`}>{t.cta.call}</a>
-      ) : (
-        <a class="btn btn-gold" href={`mailto:${SITE.email}`}>{t.cta.inquire}</a>
-      )}
-      <a class="btn btn-ghost" href="#work">{t.nav.work}</a>
+    <div class="hero-text">
+      <p class="hero-badge reveal">{t.hero.badge}</p>
+
+      <h1 class="display h-xl hero-title reveal mask-head">
+        <span class="ml"><span>{t.hero.line1}</span></span>
+        <span class="ml"><span>{t.hero.line2}</span></span>
+      </h1>
+
+      <p class="hero-recent reveal">
+        <span class="recent-label">{t.hero.recent}</span>
+        <span class="typing" id="typing" data-words={JSON.stringify(t.hero.rotate)}></span><span class="caret" aria-hidden="true"></span>
+      </p>
+
+      <p class="lead hero-sub reveal">{t.hero.sub}</p>
+
+      <div class="hero-cta reveal">
+        {SITE.phone ? (
+          <a class="btn btn-gold" href={`tel:${SITE.phone}`}>{t.cta.call}</a>
+        ) : (
+          <a class="btn btn-gold" href={`mailto:${SITE.email}`}>{t.cta.inquire}</a>
+        )}
+        <a class="btn btn-ghost" href="#work">{t.nav.work}</a>
+      </div>
+    </div>
+
+    <div class="hero-figure reveal" data-cursor>
+      <Image src={heroImg} alt="" width={880} fetchpriority="high" loading="eager" />
+      <span class="fig-a" aria-hidden="true">A</span>
+      <span class="fig-b" aria-hidden="true">B</span>
     </div>
   </div>
 
@@ -38,29 +54,25 @@ const t = useTranslations(lang);
     min-height: 100svh;
     display: flex;
     align-items: center;
-    padding: calc(var(--header-h) + 48px) 0 96px;
+    padding: calc(var(--header-h) + 40px) 0 90px;
     overflow: hidden;
   }
-  .hero-bg {
+  .hero-glow {
     position: absolute;
     inset: 0;
-    background: url('/og-default.jpg') center / cover no-repeat;
-    opacity: 0.42;
-  }
-  .hero-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.95) 100%);
-  }
-  #bridge-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .hero-veil {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(60% 55% at 72% 22%, rgba(201,162,94,0.10), transparent 70%);
+    background:
+      radial-gradient(52% 50% at 78% 42%, rgba(201,162,94,0.16), transparent 68%),
+      radial-gradient(40% 40% at 12% 80%, rgba(201,162,94,0.06), transparent 70%);
     pointer-events: none;
   }
-  .hero-inner { position: relative; z-index: 2; }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 72px);
+  }
 
   .hero-badge {
     font-size: 12.5px;
@@ -70,15 +82,67 @@ const t = useTranslations(lang);
     color: var(--gold);
   }
   .hero-title { margin-top: 22px; }
-  .hero-title span { display: block; }
-  .hero-title span:last-child { color: var(--ink-dim); }
+  .hero-title .ml:last-child > span { color: var(--ink-dim); }
 
-  .hero-sub { margin-top: 26px; }
-  .hero-cta { margin-top: 38px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-recent {
+    margin-top: 26px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-family: var(--font-display);
+    font-size: clamp(15px, 1.7vw, 19px);
+  }
+  .recent-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+  .typing { color: var(--gold-soft); font-weight: 500; min-height: 1em; }
+  .caret {
+    display: inline-block;
+    width: 2px;
+    height: 1.05em;
+    margin-left: 2px;
+    background: var(--gold);
+    transform: translateY(3px);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-sub { margin-top: 24px; }
+  .hero-cta { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .hero-figure {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 120px -40px rgba(0,0,0,0.9);
+    animation: float 7s ease-in-out infinite;
+  }
+  .hero-figure :global(img) { width: 100%; height: auto; display: block; }
+  .fig-a, .fig-b {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.4vw, 34px);
+    font-weight: 700;
+    color: var(--gold-soft);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  }
+  .fig-a { left: 18px; }
+  .fig-b { right: 18px; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
   .scroll-tag {
     position: absolute;
-    bottom: 30px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 11px;
@@ -90,85 +154,53 @@ const t = useTranslations(lang);
   .scroll-tag::after {
     content: '';
     display: block;
-    width: 1px;
-    height: 26px;
+    width: 1px; height: 24px;
     margin: 8px auto 0;
     background: linear-gradient(var(--gold), transparent);
     animation: drop 1.9s ease-in-out infinite;
     transform-origin: top;
   }
   @keyframes drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
-  @media (max-width: 560px) { .scroll-tag { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .scroll-tag::after { animation: none; } }
+
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-figure { order: 2; max-width: 560px; }
+    .scroll-tag { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-figure { animation: none; }
+    .caret { animation: none; }
+    .scroll-tag::after { animation: none; }
+  }
 </style>
 
 <script>
-  // A → B 브릿지 파티클 (경량 Canvas 2D · 화면 밖/백그라운드 자동 정지 · 델타타임)
-  const canvas = document.getElementById('bridge-canvas') as HTMLCanvasElement | null;
-  if (canvas && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const ctx = canvas.getContext('2d')!;
-    const WORDS = ['ARTIST','STAGE','BRAND','MARKET','SEOUL','SHANGHAI','TOKYO','HANOI','CONTRACT','GLOBAL'];
-    const GOLD = '201, 162, 94';
-    let w = 0, h = 0, dpr = 1, raf = 0, time = 0, last = 0;
-
-    interface T { t: number; speed: number; word: string; size: number; wob: number }
-    interface D { x: number; y: number; r: number; a: number; tw: number }
-    const trav: T[] = [], dots: D[] = [];
-    const mkT = (t: number): T => ({ t, speed: 0.05 + Math.random() * 0.05, word: WORDS[(Math.random()*WORDS.length)|0], size: 10 + Math.random()*3, wob: (Math.random()-0.5)*34 });
-    const mkD = (): D => ({ x: Math.random()*w, y: Math.random()*h, r: 0.6 + Math.random()*1.3, a: 0.06 + Math.random()*0.2, tw: Math.random()*6.28 });
-
-    function resize() {
-      const pw = w, ph = h;
-      w = canvas.clientWidth; h = canvas.clientHeight;
-      if (!w || !h) return;
-      dpr = Math.min(devicePixelRatio || 1, 2);
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = w < 700 ? 5 : 9, dn = w < 700 ? 22 : 46;
-      if (pw && ph) for (const d of dots) { d.x *= w/pw; d.y *= h/ph; }
-      while (trav.length < n) trav.push(mkT(trav.length / n));
-      trav.length = Math.min(trav.length, n);
-      while (dots.length < dn) dots.push(mkD());
-      dots.length = Math.min(dots.length, dn);
-    }
-    function path(t: number, wob: number) {
-      const x0=-40, y0=h*0.82, cx=w*0.5, cy=h*0.14, x1=w+40, y1=h*0.72, mt=1-t;
-      return { x: mt*mt*x0 + 2*mt*t*cx + t*t*x1, y: mt*mt*y0 + 2*mt*t*cy + t*t*y1 + wob*Math.sin(t*Math.PI) };
-    }
-    function frame(now: number) {
-      if (!last) last = now;
-      const dt = Math.min(now - last, 50); last = now; time += dt/1000;
-      ctx.clearRect(0, 0, w, h);
-      for (const d of dots) {
-        const a = d.a * (0.6 + 0.4 * Math.sin(time*1.2 + d.tw));
-        ctx.fillStyle = `rgba(${GOLD}, ${a})`;
-        ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.283); ctx.fill();
+  // 타이핑 애니메이션 — 최근 진행 프로젝트를 순환 (홍콩 티파니 / 효민 상하이·호치민 / SPECULUM×SEVENTEEN)
+  const el = document.getElementById('typing');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el && el.dataset.words) {
+    let words: string[] = [];
+    try { words = JSON.parse(el.dataset.words); } catch {}
+    if (words.length) {
+      if (reduce) {
+        el.textContent = words[0];
+      } else {
+        let wi = 0, ci = 0, deleting = false;
+        const tick = () => {
+          const word = words[wi];
+          if (!deleting) {
+            ci++;
+            el.textContent = word.slice(0, ci);
+            if (ci === word.length) { deleting = true; return setTimeout(tick, 1600); }
+          } else {
+            ci--;
+            el.textContent = word.slice(0, ci);
+            if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
+          }
+          setTimeout(tick, deleting ? 34 : 68);
+        };
+        setTimeout(tick, 700);
       }
-      ctx.strokeStyle = `rgba(${GOLD}, 0.10)`; ctx.lineWidth = 1;
-      ctx.beginPath();
-      for (let i = 0; i <= 60; i++) { const p = path(i/60, 0); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
-      ctx.stroke();
-      ctx.textBaseline = 'middle';
-      for (const tr of trav) {
-        tr.t += (tr.speed * dt) / 1000;
-        if (tr.t > 1.05) { tr.t = -0.05; tr.word = WORDS[(Math.random()*WORDS.length)|0]; }
-        const p = path(Math.max(0, Math.min(1, tr.t)), tr.wob);
-        const alpha = Math.max(0, Math.min(1, Math.min(tr.t, 1-tr.t) * 8));
-        ctx.fillStyle = `rgba(${GOLD}, ${0.6*alpha})`;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2.1, 0, 6.283); ctx.fill();
-        ctx.font = `500 ${tr.size}px Inter, sans-serif`;
-        ctx.fillStyle = `rgba(${GOLD}, ${0.45*alpha})`;
-        ctx.fillText(tr.word, p.x + 8, p.y - 8);
-      }
-      raf = requestAnimationFrame(frame);
     }
-    function start() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
-    function stop() { cancelAnimationFrame(raf); raf = 0; }
-    let onScreen = true;
-    const sync = () => (onScreen && !document.hidden ? start() : stop());
-    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
-    document.addEventListener('visibilitychange', sync);
-    new ResizeObserver(() => resize()).observe(canvas);
-    resize(); sync();
   }
 </script>

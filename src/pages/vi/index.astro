@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/Home.astro';
+import { SITE } from '../../config';
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Đại lý giải trí & Phân phối thương hiệu toàn cầu',
+  provider: { '@id': `${SITE.url}/#organization` },
+  areaServed: ['KR', 'CN', 'JP', 'VN'],
+  serviceType: ['Đại lý fanmeeting', 'Tổ chức concert', 'Tuyển chọn nghệ sĩ', 'Đại lý quảng cáo', 'Phân phối thương hiệu'],
+};
+---
+
+<Base lang="vi" i18nAlternates basePath="/" jsonLd={[serviceJsonLd]}>
+  <Home lang="vi" />
+</Base>
