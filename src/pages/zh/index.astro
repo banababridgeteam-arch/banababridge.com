@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/Home.astro';
+import { SITE } from '../../config';
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: '娱乐经纪与全球品牌分销',
+  provider: { '@id': `${SITE.url}/#organization` },
+  areaServed: ['KR', 'CN', 'JP', 'VN'],
+  serviceType: ['粉丝见面会经纪', '演唱会企划', '艺人邀约', '广告代理', '品牌分销'],
+};
+---
+
+<Base lang="zh" i18nAlternates basePath="/" jsonLd={[serviceJsonLd]}>
+  <Home lang="zh" />
+</Base>

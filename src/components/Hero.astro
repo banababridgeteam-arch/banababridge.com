@@ -1,52 +1,35 @@
 ---
 import { SITE } from '../config';
+import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
+
+interface Props { lang?: Lang }
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <section class="hero" id="top">
   <div class="hero-bg" aria-hidden="true"></div>
   <canvas id="bridge-canvas" aria-hidden="true"></canvas>
-  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
 
   <div class="container hero-inner">
-    <p class="eyebrow">Entertainment Agency &amp; Global Vendor</p>
-    <h1>
-      아티스트에겐 <em>무대</em>를,<br />
-      브랜드에겐 <em>시장</em>을.
+    <p class="hero-badge reveal">{t.hero.badge}</p>
+    <h1 class="display h-xl hero-title reveal">
+      <span>{t.hero.line1}</span>
+      <span>{t.hero.line2}</span>
     </h1>
-    <p class="hero-sub">
-      서울에서 상하이, 도쿄, 하노이까지.<br class="mobile-br" />
-      바나바브릿지는 검증된 프로세스와 계약으로 A와 B를 잇는 글로벌 에이전시입니다.
-    </p>
-    <div class="hero-cta">
+    <p class="lead hero-sub reveal">{t.hero.sub}</p>
+    <div class="hero-cta reveal">
       {SITE.phone ? (
-        <a class="btn btn-gold" href={`tel:${SITE.phone}`}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/>
-          </svg>
-          지금 바로 전화 연결
-        </a>
+        <a class="btn btn-gold" href={`tel:${SITE.phone}`}>{t.cta.call}</a>
       ) : (
-        <a class="btn btn-gold" href={`mailto:${SITE.email}`}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <path d="m3 7 9 6 9-6"/>
-          </svg>
-          이메일 문의하기
-        </a>
+        <a class="btn btn-gold" href={`mailto:${SITE.email}`}>{t.cta.inquire}</a>
       )}
-      <a class="btn btn-ghost" href="#works">레퍼런스 보기</a>
+      <a class="btn btn-ghost" href="#work">{t.nav.work}</a>
     </div>
-
-    <ul class="hero-stats">
-      <li><strong>SINCE 2023</strong><span>법인 운영</span></li>
-      <li><strong>KR · CN · JP · VN</strong><span>글로벌 프로젝트</span></li>
-      <li><strong>100%</strong><span>계약 기반 진행</span></li>
-    </ul>
   </div>
 
-  <div class="scroll-hint" aria-hidden="true">
-    <span></span>
-  </div>
+  <span class="scroll-tag" aria-hidden="true">{t.hero.scroll}</span>
 </section>
 
 <style>
@@ -55,281 +38,137 @@ import { SITE } from '../config';
     min-height: 100svh;
     display: flex;
     align-items: center;
-    padding: calc(var(--header-h) + 40px) 0 80px;
+    padding: calc(var(--header-h) + 48px) 0 96px;
     overflow: hidden;
   }
   .hero-bg {
     position: absolute;
     inset: 0;
     background: url('/og-default.jpg') center / cover no-repeat;
-    opacity: 0.5;
+    opacity: 0.42;
   }
   .hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(10, 10, 14, 0.55) 0%,
-      rgba(10, 10, 14, 0.35) 45%,
-      rgba(10, 10, 14, 0.92) 100%
-    );
+    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.95) 100%);
   }
-  #bridge-canvas {
+  #bridge-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-veil {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .hero-glow {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(60% 50% at 70% 20%, rgba(207, 169, 107, 0.10), transparent 70%),
-      radial-gradient(50% 45% at 15% 85%, rgba(207, 169, 107, 0.06), transparent 70%);
+    background: radial-gradient(60% 55% at 72% 22%, rgba(201,162,94,0.10), transparent 70%);
     pointer-events: none;
   }
   .hero-inner { position: relative; z-index: 2; }
 
-  h1 {
-    margin-top: 22px;
-    font-size: clamp(38px, 7vw, 72px);
-    font-weight: 800;
-    line-height: 1.18;
-    letter-spacing: -0.03em;
+  .hero-badge {
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
   }
-  h1 em {
-    font-style: normal;
-    background: linear-gradient(120deg, var(--gold-soft), var(--gold));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .hero-sub {
-    margin-top: 22px;
-    max-width: 620px;
-    color: var(--ink-dim);
-    font-size: clamp(16px, 2vw, 18.5px);
-  }
-  .mobile-br { display: none; }
+  .hero-title { margin-top: 22px; }
+  .hero-title span { display: block; }
+  .hero-title span:last-child { color: var(--ink-dim); }
 
-  .hero-cta {
-    margin-top: 36px;
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
+  .hero-sub { margin-top: 26px; }
+  .hero-cta { margin-top: 38px; display: flex; gap: 14px; flex-wrap: wrap; }
 
-  .hero-stats {
-    margin-top: 64px;
-    display: flex;
-    gap: clamp(28px, 6vw, 72px);
-    list-style: none;
-    flex-wrap: wrap;
-  }
-  .hero-stats li { display: flex; flex-direction: column; gap: 4px; }
-  .hero-stats strong {
-    font-size: clamp(17px, 2.2vw, 21px);
-    letter-spacing: 0.02em;
-    color: var(--ink);
-  }
-  .hero-stats span { font-size: 13px; color: var(--muted); }
-
-  .scroll-hint {
+  .scroll-tag {
     position: absolute;
-    bottom: 26px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 22px;
-    height: 36px;
-    border: 1.5px solid var(--line-strong);
-    border-radius: 12px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
     z-index: 2;
   }
-  .scroll-hint span {
-    position: absolute;
-    top: 7px;
-    left: 50%;
-    width: 3px;
-    height: 7px;
-    margin-left: -1.5px;
-    border-radius: 2px;
-    background: var(--gold);
-    animation: hint 1.8s ease-in-out infinite;
+  .scroll-tag::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 26px;
+    margin: 8px auto 0;
+    background: linear-gradient(var(--gold), transparent);
+    animation: drop 1.9s ease-in-out infinite;
+    transform-origin: top;
   }
-  @keyframes hint {
-    0% { transform: translateY(0); opacity: 1; }
-    70% { transform: translateY(11px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 0; }
-  }
-
-  @media (max-width: 560px) {
-    .mobile-br { display: block; }
-    .scroll-hint { display: none; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-hint span { animation: none; }
-  }
+  @keyframes drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
+  @media (max-width: 560px) { .scroll-tag { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .scroll-tag::after { animation: none; } }
 </style>
 
 <script>
-  // ============================================================
-  // A → B 브릿지 파티클 애니메이션 (경량 Canvas 2D)
-  // - 키워드가 A(왼쪽)에서 B(오른쪽)로 아치를 그리며 건너감
-  // - 렉 방지 3중 가드: reduced-motion 미실행 / 탭 비활성 정지 /
-  //   히어로가 화면 밖으로 스크롤되면 정지 (IntersectionObserver)
-  // - 델타타임 기반 → 60Hz/120Hz 어디서든 동일 속도
-  // ============================================================
+  // A → B 브릿지 파티클 (경량 Canvas 2D · 화면 밖/백그라운드 자동 정지 · 델타타임)
   const canvas = document.getElementById('bridge-canvas') as HTMLCanvasElement | null;
-
   if (canvas && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const ctx = canvas.getContext('2d')!;
-    const WORDS = [
-      'ARTIST', 'STAGE', 'BRAND', 'MARKET', 'FAN MEETING', 'CONCERT',
-      'SEOUL', 'SHANGHAI', 'TOKYO', 'HANOI', 'CONTRACT', 'GLOBAL',
-    ];
-    const GOLD = '207, 169, 107';
+    const WORDS = ['ARTIST','STAGE','BRAND','MARKET','SEOUL','SHANGHAI','TOKYO','HANOI','CONTRACT','GLOBAL'];
+    const GOLD = '201, 162, 94';
+    let w = 0, h = 0, dpr = 1, raf = 0, time = 0, last = 0;
 
-    let w = 0, h = 0, dpr = 1, raf = 0;
+    interface T { t: number; speed: number; word: string; size: number; wob: number }
+    interface D { x: number; y: number; r: number; a: number; tw: number }
+    const trav: T[] = [], dots: D[] = [];
+    const mkT = (t: number): T => ({ t, speed: 0.05 + Math.random() * 0.05, word: WORDS[(Math.random()*WORDS.length)|0], size: 10 + Math.random()*3, wob: (Math.random()-0.5)*34 });
+    const mkD = (): D => ({ x: Math.random()*w, y: Math.random()*h, r: 0.6 + Math.random()*1.3, a: 0.06 + Math.random()*0.2, tw: Math.random()*6.28 });
 
-    interface Traveler {
-      t: number;      // 0~1 경로 진행도
-      speed: number;  // 초당 진행량
-      word: string;
-      size: number;
-      wobble: number; // 경로에서 살짝 벗어나는 흔들림
-    }
-    interface Dot { x: number; y: number; r: number; a: number; tw: number }
-
-    const travelers: Traveler[] = [];
-    const dots: Dot[] = [];
-
-    const makeTraveler = (t: number): Traveler => ({
-      t,
-      speed: 0.055 + Math.random() * 0.055, // t/초 (60fps 기준 이전 값과 동일 체감)
-      word: WORDS[(Math.random() * WORDS.length) | 0],
-      size: 10 + Math.random() * 3,
-      wobble: (Math.random() - 0.5) * 36,
-    });
-    const makeDot = (): Dot => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: 0.6 + Math.random() * 1.4,
-      a: 0.08 + Math.random() * 0.22,
-      tw: Math.random() * Math.PI * 2,
-    });
-
-    // 크기·DPR만 갱신하고 진행 중인 파티클 상태는 보존 (리사이즈 시 리셋 방지)
     function resize() {
-      const prevW = w, prevH = h;
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
+      const pw = w, ph = h;
+      w = canvas.clientWidth; h = canvas.clientHeight;
       if (!w || !h) return;
       dpr = Math.min(devicePixelRatio || 1, 2);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const n = w < 700 ? 5 : 9;
-      const dn = w < 700 ? 26 : 54;
-      if (prevW && prevH) {
-        // 기존 점 좌표를 새 크기에 비례 이동
-        for (const d of dots) { d.x *= w / prevW; d.y *= h / prevH; }
-      }
-      while (travelers.length < n) travelers.push(makeTraveler(travelers.length / n));
-      travelers.length = Math.min(travelers.length, n);
-      while (dots.length < dn) dots.push(makeDot());
+      const n = w < 700 ? 5 : 9, dn = w < 700 ? 22 : 46;
+      if (pw && ph) for (const d of dots) { d.x *= w/pw; d.y *= h/ph; }
+      while (trav.length < n) trav.push(mkT(trav.length / n));
+      trav.length = Math.min(trav.length, n);
+      while (dots.length < dn) dots.push(mkD());
       dots.length = Math.min(dots.length, dn);
     }
-
-    // 아치형 브릿지 경로 (2차 베지어)
-    function path(t: number, wobble: number) {
-      const x0 = -40, y0 = h * 0.82;
-      const cx = w * 0.5, cy = h * 0.16;
-      const x1 = w + 40, y1 = h * 0.72;
-      const mt = 1 - t;
-      const x = mt * mt * x0 + 2 * mt * t * cx + t * t * x1;
-      const y = mt * mt * y0 + 2 * mt * t * cy + t * t * y1 + wobble * Math.sin(t * Math.PI);
-      return { x, y };
+    function path(t: number, wob: number) {
+      const x0=-40, y0=h*0.82, cx=w*0.5, cy=h*0.14, x1=w+40, y1=h*0.72, mt=1-t;
+      return { x: mt*mt*x0 + 2*mt*t*cx + t*t*x1, y: mt*mt*y0 + 2*mt*t*cy + t*t*y1 + wob*Math.sin(t*Math.PI) };
     }
-
-    let time = 0;
-    let last = 0;
     function frame(now: number) {
       if (!last) last = now;
-      const dt = Math.min(now - last, 50); // ms, 탭 복귀 점프 방지 상한
-      last = now;
-      time += dt / 1000;
-
+      const dt = Math.min(now - last, 50); last = now; time += dt/1000;
       ctx.clearRect(0, 0, w, h);
-
-      // 배경 별처럼 흩어진 점
       for (const d of dots) {
-        const a = d.a * (0.6 + 0.4 * Math.sin(time * 1.2 + d.tw));
+        const a = d.a * (0.6 + 0.4 * Math.sin(time*1.2 + d.tw));
         ctx.fillStyle = `rgba(${GOLD}, ${a})`;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.283); ctx.fill();
       }
-
-      // 브릿지 경로 (은은한 곡선)
-      ctx.strokeStyle = `rgba(${GOLD}, 0.10)`;
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(${GOLD}, 0.10)`; ctx.lineWidth = 1;
       ctx.beginPath();
-      for (let i = 0; i <= 60; i++) {
-        const p = path(i / 60, 0);
-        i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
-      }
+      for (let i = 0; i <= 60; i++) { const p = path(i/60, 0); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
       ctx.stroke();
-
-      // 이동하는 키워드 + 궤적
       ctx.textBaseline = 'middle';
-      for (const tr of travelers) {
+      for (const tr of trav) {
         tr.t += (tr.speed * dt) / 1000;
-        if (tr.t > 1.05) {
-          tr.t = -0.05;
-          tr.word = WORDS[(Math.random() * WORDS.length) | 0];
-        }
-        const p = path(Math.max(0, Math.min(1, tr.t)), tr.wobble);
-        // 가장자리 페이드
-        const edge = Math.min(tr.t, 1 - tr.t);
-        const alpha = Math.max(0, Math.min(1, edge * 8));
-
-        // 궤적 점
-        ctx.fillStyle = `rgba(${GOLD}, ${0.65 * alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 키워드
-        ctx.font = `600 ${tr.size}px Pretendard, sans-serif`;
-        ctx.fillStyle = `rgba(${GOLD}, ${0.5 * alpha})`;
+        if (tr.t > 1.05) { tr.t = -0.05; tr.word = WORDS[(Math.random()*WORDS.length)|0]; }
+        const p = path(Math.max(0, Math.min(1, tr.t)), tr.wob);
+        const alpha = Math.max(0, Math.min(1, Math.min(tr.t, 1-tr.t) * 8));
+        ctx.fillStyle = `rgba(${GOLD}, ${0.6*alpha})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2.1, 0, 6.283); ctx.fill();
+        ctx.font = `500 ${tr.size}px Inter, sans-serif`;
+        ctx.fillStyle = `rgba(${GOLD}, ${0.45*alpha})`;
         ctx.fillText(tr.word, p.x + 8, p.y - 8);
       }
-
       raf = requestAnimationFrame(frame);
     }
-
-    function start() {
-      if (!raf) { last = 0; raf = requestAnimationFrame(frame); }
-    }
+    function start() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
     function stop() { cancelAnimationFrame(raf); raf = 0; }
-
-    // 화면 안 + 탭 활성일 때만 실행
     let onScreen = true;
     const sync = () => (onScreen && !document.hidden ? start() : stop());
-    const vio = new IntersectionObserver(([e]) => {
-      onScreen = e.isIntersecting;
-      sync();
-    });
-    vio.observe(canvas);
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
     document.addEventListener('visibilitychange', sync);
-
-    // ResizeObserver: 스타일 적용·창 크기 변경 시 자동 재측정 (초기 0 크기 방지)
-    // 백그라운드 탭에서는 RO 초기 발화가 지연될 수 있어 명시 호출 1회 병행
-    const ro = new ResizeObserver(() => resize());
-    ro.observe(canvas);
-    resize();
-    sync();
+    new ResizeObserver(() => resize()).observe(canvas);
+    resize(); sync();
   }
 </script>

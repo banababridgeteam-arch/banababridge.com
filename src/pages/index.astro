@@ -1,17 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Services from '../components/Services.astro';
-import Works from '../components/Works.astro';
-import Gallery from '../components/Gallery.astro';
-import Process from '../components/Process.astro';
-import Faq from '../components/Faq.astro';
-import Contact from '../components/Contact.astro';
-import { faqs } from '../data/faqs';
+import Home from '../components/Home.astro';
 import { SITE } from '../config';
+import { faqs } from '../data/faqs';
 
-// FAQPage 스키마 — AEO(ChatGPT·클로드·퍼플렉시티 등 답변엔진) 대응
+// 서비스 스키마 (전 언어 공통)
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: '엔터테인먼트 에이전시 및 브랜드 유통',
+  provider: { '@id': `${SITE.url}/#organization` },
+  areaServed: ['KR', 'CN', 'JP', 'VN'],
+  serviceType: ['팬미팅 에이전시', '팬콘서트 기획', '아티스트 섭외', '광고 에이전시', '브랜드 유통 벤더'],
+};
+// FAQPage (한국어 AEO — 답변엔진 대응). ko 홈에만 출력.
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -21,33 +23,8 @@ const faqJsonLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
-
-// 서비스 스키마
-const serviceJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Service',
-  name: '엔터테인먼트 에이전시 및 브랜드 유통',
-  provider: { '@id': `${SITE.url}/#organization` },
-  areaServed: ['KR', 'CN', 'JP', 'VN'],
-  serviceType: [
-    '팬미팅 에이전시',
-    '팬콘서트 기획',
-    '아티스트 섭외',
-    '광고 에이전시',
-    '브랜드 유통 벤더',
-  ],
-};
 ---
 
-<Base jsonLd={[faqJsonLd, serviceJsonLd]}>
-  <main>
-    <Hero />
-    <About />
-    <Services />
-    <Works />
-    <Gallery />
-    <Process />
-    <Faq />
-    <Contact />
-  </main>
+<Base lang="ko" i18nAlternates basePath="/" jsonLd={[serviceJsonLd, faqJsonLd]}>
+  <Home lang="ko" />
 </Base>

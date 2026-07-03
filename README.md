@@ -16,17 +16,24 @@ npm run preview  # 빌드 결과 미리보기
 ```
 src/
   config.ts              ← ★ 전화번호·이메일·GA4·검증코드 전부 여기서 관리
-  data/works.ts          ← 레퍼런스 추가는 여기
-  data/faqs.ts           ← FAQ 수정 (JSON-LD 자동 반영)
-  content/insights/      ← 블로그 글 (md 파일 추가 = 발행)
-  components/            ← 섹션 단위 컴포넌트
-  layouts/Base.astro     ← SEO 메타·JSON-LD·분석 스크립트
-public/
-  robots.txt / llms.txt  ← 검색엔진·AI 크롤러 대응
-docs/
-  00_요구사항_회의추출   ← 2026-06-29 회의에서 추출한 요구사항 (기준 문서)
-  01_디자인_레퍼런스     ← 디자인 참고 사이트 모음
+  i18n/ui.ts             ← ★ 3개 언어(ko/en/zh) 카피 전부 여기서 관리
+  data/works.ts          ← 레퍼런스 (제목은 3개 언어). image=IG파일명, video=public경로
+  data/faqs.ts           ← FAQ (ko, FAQPage JSON-LD 자동 반영)
+  content/insights/      ← 블로그 글 (md 파일 추가 = 발행, 한국어 SEO)
+  components/Home.astro  ← 홈 섹션 조립 (Hero·About·Works·Services·Stats·Contact)
+  components/            ← 섹션 컴포넌트 (전부 lang prop 받음)
+  layouts/Base.astro     ← SEO 메타·hreflang·JSON-LD·폰트·분석
+  pages/index.astro      ← ko (/)     pages/en/ (/en)   pages/zh/ (/zh)
+  assets/ig/             ← 인스타그램 원본 미디어 (manifest.json에 캡션)
+public/media/            ← 영상 (티파니 홍콩)
+docs/                    ← 요구사항(기준문서)·디자인 레퍼런스
 ```
+
+## 디자인
+
+- 레퍼런스: **strove.mx** (순수 블랙 + 초대형 타이트 Inter 타이포 + `(01)` 섹션 라벨 + 거대 워드마크) + 샴페인 골드 단일 액센트
+- 다국어: **한국어(기본, `/`) · English(`/en`) · 简体中文(`/zh`)**. 헤더 우측 `KO·EN·中` 스위처. hreflang·per-locale OG·sitemap i18n 자동
+- 카피 수정 = `src/i18n/ui.ts` 한 곳. 레퍼런스 추가 = `src/data/works.ts`
 
 ## 배포 (Cloudflare Pages)
 

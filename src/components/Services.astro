@@ -1,94 +1,45 @@
 ---
-const services = [
-  {
-    tag: 'ENTERTAINMENT',
-    title: '엔터테인먼트 에이전시',
-    desc: 'K-아티스트의 글로벌 무대를 처음부터 끝까지 만듭니다.',
-    items: [
-      '해외 팬미팅 · 팬콘서트 기획 및 에이전시',
-      '아티스트 섭외 · 출연 계약 대행',
-      '브랜드 광고 · 앰버서더 에이전시',
-      '비자 · 스태프 · 현지 운영 코디네이션',
-    ],
-  },
-  {
-    tag: 'VENDOR / DISTRIBUTION',
-    title: '브랜드 유통 벤더',
-    desc: '좋은 브랜드를 찾아 팔리는 채널에 연결합니다.',
-    items: [
-      '브랜드 소싱 · 머천다이징(MD)',
-      '국내외 판매 채널 연결',
-      '공급 · 정산 · 물류 조율',
-      '카테고리: 아이웨어 · 패션 · 뷰티 · F&B',
-    ],
-  },
-];
+import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
+interface Props { lang?: Lang }
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <section class="section" id="services">
   <div class="container">
-    <p class="eyebrow reveal">Services</p>
-    <h2 class="h2 reveal">두 개의 다리를 놓습니다.</h2>
-    <p class="lead reveal">
-      엔터테인먼트와 유통. 서로 다른 두 사업이지만 하는 일은 같습니다 —
-      가치가 필요한 곳으로 가치를 건너가게 하는 것.
-    </p>
+    <p class="index-label reveal"><span class="num">03</span><span class="txt">{t.services.label}</span></p>
+    <h2 class="display h-lg reveal">{t.services.head}</h2>
 
-    <div class="svc-grid">
-      {services.map((s) => (
-        <article class="card svc-card reveal">
-          <p class="svc-tag">{s.tag}</p>
-          <h3>{s.title}</h3>
-          <p class="svc-desc">{s.desc}</p>
-          <ul>
-            {s.items.map((item) => <li>{item}</li>)}
-          </ul>
-        </article>
+    <ol class="svc-list">
+      {t.services.items.map((s) => (
+        <li class="svc-row reveal">
+          <span class="svc-no">{s.no}</span>
+          <span class="svc-title display">{s.title}</span>
+          <span class="svc-desc">{s.desc}</span>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
 
 <style>
-  .svc-grid {
-    margin-top: 52px;
+  .svc-list { list-style: none; margin-top: clamp(36px, 5vw, 64px); border-top: 1px solid var(--line); }
+  .svc-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-    gap: 22px;
+    grid-template-columns: 64px 1fr minmax(0, 34ch);
+    align-items: center;
+    gap: 24px;
+    padding: clamp(24px, 3.4vw, 40px) 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1);
   }
-  .svc-card { padding: 38px 34px; }
-  .svc-tag {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-  }
-  .svc-card h3 {
-    margin-top: 14px;
-    font-size: clamp(21px, 2.4vw, 25px);
-    letter-spacing: -0.02em;
-  }
-  .svc-desc { margin-top: 10px; color: var(--ink-dim); font-size: 15.5px; }
-  .svc-card ul {
-    margin-top: 22px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-  .svc-card li {
-    position: relative;
-    padding-left: 22px;
-    color: var(--ink-dim);
-    font-size: 15px;
-  }
-  .svc-card li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.62em;
-    width: 10px;
-    height: 1.5px;
-    background: var(--gold);
+  .svc-row:hover { padding-left: 14px; }
+  .svc-no { font-size: 14px; font-weight: 500; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .svc-title { font-size: clamp(22px, 3vw, 40px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  .svc-desc { color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+
+  @media (max-width: 820px) {
+    .svc-row { grid-template-columns: 40px 1fr; row-gap: 10px; align-items: baseline; }
+    .svc-desc { grid-column: 2; }
   }
 </style>

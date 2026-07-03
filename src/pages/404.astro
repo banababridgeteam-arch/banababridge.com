@@ -2,47 +2,29 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="페이지를 찾을 수 없습니다" noindex>
-  <main class="section nf-page">
+<Base title="404" noindex>
+  <main class="section nf">
     <div class="container nf-inner">
-      <p class="nf-code">404</p>
-      <h1 class="h2">페이지를 찾을 수 없습니다</h1>
-      <p class="lead">
-        주소가 변경되었거나 삭제된 페이지입니다.<br />
-        아래 버튼으로 홈으로 돌아가실 수 있습니다.
-      </p>
+      <p class="nf-code display">404</p>
+      <h1 class="display h-md">페이지를 찾을 수 없습니다</h1>
+      <p class="lead">주소가 변경되었거나 삭제된 페이지입니다.</p>
       <div class="nf-actions">
-        <a class="btn btn-gold" href="/">홈으로 돌아가기</a>
-        <a class="btn btn-ghost" href="/insights/">Insights 보기</a>
+        <a class="btn btn-gold" href="/">홈으로</a>
+        <a class="btn btn-ghost" href="/insights/">Insights</a>
       </div>
     </div>
   </main>
 </Base>
 
 <style>
-  .nf-page {
-    min-height: 72vh;
-    display: flex;
-    align-items: center;
-    padding-top: calc(var(--header-h) + 40px);
-  }
+  .nf { min-height: 72vh; display: flex; align-items: center; padding-top: calc(var(--header-h) + 40px); }
   .nf-inner { text-align: center; }
   .nf-code {
-    font-size: clamp(64px, 12vw, 120px);
-    font-weight: 800;
-    letter-spacing: 0.04em;
+    font-size: clamp(72px, 14vw, 140px); font-weight: 700; line-height: 1;
     background: linear-gradient(120deg, var(--gold-soft), var(--gold));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    line-height: 1;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .nf-inner .lead { margin-inline: auto; }
-  .nf-actions {
-    margin-top: 32px;
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+  .nf h1 { margin-top: 12px; }
+  .nf-inner .lead { margin: 16px auto 0; }
+  .nf-actions { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 </style>

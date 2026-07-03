@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/Home.astro';
+import { SITE } from '../../config';
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Entertainment Agency & Global Brand Distribution',
+  provider: { '@id': `${SITE.url}/#organization` },
+  areaServed: ['KR', 'CN', 'JP', 'VN'],
+  serviceType: ['Fan Meeting Agency', 'Concert Planning', 'Artist Casting', 'Advertising Agency', 'Brand Distribution'],
+};
+---
+
+<Base lang="en" i18nAlternates basePath="/" jsonLd={[serviceJsonLd]}>
+  <Home lang="en" />
+</Base>

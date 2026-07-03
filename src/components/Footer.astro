@@ -1,64 +1,100 @@
 ---
 import { SITE } from '../config';
+import { type Lang, defaultLang, localizePath, useTranslations } from '../i18n/ui';
+
+interface Props { lang?: Lang }
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const p = (path: string) => localizePath(path, lang);
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container">
+  {/* 거대 워드마크 (strove 시그니처) */}
+  <div class="wordmark-wrap" aria-hidden="true">
+    <div class="wordmark">BANABA BRIDGE<span class="reg">®</span></div>
+  </div>
+
+  <div class="footer-body container">
     <div class="footer-top">
-      <div>
-        <p class="footer-logo">BANABA<span>BRIDGE</span></p>
-        <p class="footer-tag">아티스트에겐 무대를, 브랜드에겐 시장을.</p>
+      <div class="footer-brand">
+        <p class="footer-tag">{t.footer.tagline}</p>
+        <a class="footer-contact-link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
       </div>
-      <nav class="footer-nav" aria-label="푸터 메뉴">
-        <a href="/#about">About</a>
-        <a href="/#services">Services</a>
-        <a href="/#works">References</a>
-        <a href="/insights/">Insights</a>
-        <a href="/privacy/">개인정보처리방침</a>
+
+      <nav class="footer-nav" aria-label={t.footer.menu}>
+        <a href={p('/') + '#work'}>{t.nav.work}</a>
+        <a href={p('/') + '#services'}>{t.nav.services}</a>
+        <a href={p('/') + '#about'}>{t.nav.about}</a>
+        <a href="/insights/">{t.nav.insights}</a>
+        <a href="/privacy/">{t.footer.privacy}</a>
       </nav>
     </div>
 
     <div class="footer-info">
       <p>
-        {SITE.legalName} · 사업자등록번호 {SITE.bizNumber}<br />
-        {SITE.address}<br />
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{SITE.phone && (
-          <> · <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a></>
-        )}
+        {SITE.legalName} · {SITE.bizNumber}<br />
+        {lang === 'ko' ? SITE.address : SITE.addressEn}
       </p>
-      <p class="copyright">© {year} {SITE.legalNameEn} All rights reserved.</p>
+      <p class="copyright">© {year} {SITE.legalNameEn}. {t.footer.rights}</p>
     </div>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    border-top: 1px solid var(--line);
-    padding: 56px 0 40px;
-    background: var(--bg-2);
+  .site-footer { border-top: 1px solid var(--line); padding-top: clamp(56px, 9vw, 120px); background: var(--bg); overflow: hidden; }
+
+  .wordmark-wrap { width: 100%; overflow: hidden; padding-inline: var(--gutter); }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(48px, 13.5vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, rgba(228, 202, 148, 0.14), transparent 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
+  .wordmark .reg {
+    -webkit-text-stroke: 1px var(--gold);
+    font-size: 0.3em;
+    vertical-align: top;
+  }
+
+  .footer-body { padding-top: clamp(40px, 6vw, 72px); padding-bottom: 44px; }
   .footer-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 32px;
+    gap: 40px;
     flex-wrap: wrap;
   }
-  .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: 0.06em; }
-  .footer-logo span { color: var(--gold); }
-  .footer-tag { margin-top: 8px; color: var(--muted); font-size: 14px; }
-  .footer-nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-tag { color: var(--ink); font-size: 16px; max-width: 320px; }
+  .footer-contact-link {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--gold-soft);
+    font-size: 15px;
+  }
+  .footer-contact-link:hover { color: var(--gold); }
+  .footer-nav { display: flex; gap: 24px; flex-wrap: wrap; }
   .footer-nav a { font-size: 14px; color: var(--ink-dim); }
   .footer-nav a:hover { color: var(--gold-soft); }
+
   .footer-info {
-    margin-top: 40px;
+    margin-top: clamp(40px, 6vw, 72px);
     padding-top: 24px;
     border-top: 1px solid var(--line);
     color: var(--muted);
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.9;
   }
-  .footer-info a:hover { color: var(--gold-soft); }
   .copyright { margin-top: 10px; }
+
+  @media (max-width: 640px) {
+    .footer-top { flex-direction: column; gap: 28px; }
+  }
 </style>
