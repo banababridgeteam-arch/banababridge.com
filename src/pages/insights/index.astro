@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('insights')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title="Insights"
+  description="엔터테인먼트 에이전시와 브랜드 유통 현장에서 쌓은 바나바브릿지의 인사이트를 기록합니다."
+>
+  <main class="section insights-page">
+    <div class="container">
+      <p class="eyebrow">Insights</p>
+      <h1 class="h2">현장에서 쌓은 기록</h1>
+      <p class="lead">
+        팬미팅은 어떻게 성사되는지, 유통은 어떻게 굴러가는지 —
+        직접 해본 사람만 쓸 수 있는 이야기를 남깁니다.
+      </p>
+
+      <div class="post-list">
+        {posts.map((post) => (
+          <a class="card post-card" href={`/insights/${post.id}/`}>
+            <div class="post-tags">
+              {post.data.tags.map((t) => <span>{t}</span>)}
+            </div>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {fmt(post.data.pubDate)}
+            </time>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .insights-page { padding-top: calc(var(--header-h) + 64px); min-height: 70vh; }
+  .post-list {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .post-card { padding: 30px 28px; display: flex; flex-direction: column; }
+  .post-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .post-tags span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    border: 1px solid rgba(207, 169, 107, 0.35);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .post-card h2 {
+    margin-top: 16px;
+    font-size: 19px;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+  .post-card p { margin-top: 10px; color: var(--muted); font-size: 14.5px; flex: 1; }
+  .post-card time { margin-top: 18px; font-size: 13px; color: var(--muted); }
+</style>

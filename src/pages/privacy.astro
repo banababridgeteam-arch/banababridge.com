@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+
+<Base title="개인정보처리방침" description="주식회사 바나바브릿지 개인정보처리방침" noindex>
+  <main class="section privacy-page">
+    <div class="container">
+      <h1 class="h2">개인정보처리방침</h1>
+      <div class="prose">
+        <p>
+          {SITE.legalName}(이하 "회사")는 「개인정보 보호법」 등 관련 법령을
+          준수하며, 이용자의 개인정보를 보호하기 위해 다음과 같이
+          개인정보처리방침을 수립·공개합니다.
+        </p>
+
+        <h2>1. 수집하는 개인정보 항목 및 수집 방법</h2>
+        <p>
+          회사는 전화·이메일 문의 과정에서 성명, 연락처, 이메일 주소, 소속 등
+          이용자가 자발적으로 제공하는 정보를 수집할 수 있습니다.
+        </p>
+
+        <h2>2. 개인정보의 수집 및 이용 목적</h2>
+        <ul>
+          <li>문의 접수 및 회신, 상담 진행</li>
+          <li>프로젝트 협의 및 계약 이행</li>
+        </ul>
+
+        <h2>3. 보유 및 이용 기간</h2>
+        <p>
+          수집 목적 달성 시 지체 없이 파기합니다. 단, 관련 법령에 따라 보존이
+          필요한 경우 해당 기간 동안 보관합니다.
+        </p>
+
+        <h2>4. 개인정보의 제3자 제공</h2>
+        <p>
+          회사는 이용자의 동의 없이 개인정보를 제3자에게 제공하지 않습니다.
+          단, 법령에 근거한 요청이 있는 경우는 예외로 합니다.
+        </p>
+
+        <h2>5. 개인정보 보호책임자 및 문의</h2>
+        <p>
+          개인정보 관련 문의: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+
+        <p><em>시행일: 2026년 7월 3일</em></p>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .privacy-page { padding-top: calc(var(--header-h) + 64px); }
+  .privacy-page .prose { margin-top: 32px; }
+</style>

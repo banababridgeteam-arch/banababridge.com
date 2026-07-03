@@ -1,0 +1,157 @@
+---
+import { SITE } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CallBar from '../components/CallBar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** 페이지별 JSON-LD 추가 블록 */
+  jsonLd?: object[];
+  ogType?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  jsonLd = [],
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title
+  ? `${title} | ${SITE.name}`
+  : `${SITE.name} — 엔터테인먼트 에이전시 & 글로벌 브랜드 유통`;
+
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+
+// 기본 조직 스키마 (SEO/AEO/GEO 공통 기반)
+const baseJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE.url}/#organization`,
+    name: SITE.legalName,
+    alternateName: [SITE.name, SITE.legalNameEn],
+    url: SITE.url,
+    logo: `${SITE.url}/favicon.svg`,
+    description: SITE.description,
+    foundingDate: SITE.foundingDate,
+    email: SITE.email,
+    telephone: SITE.phone,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '대지로 43, 6층 606-746호',
+      addressLocality: '용인시 수지구',
+      addressRegion: '경기도',
+      addressCountry: 'KR',
+    },
+    ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    inLanguage: 'ko',
+    publisher: { '@id': `${SITE.url}/#organization` },
+  },
+];
+
+const allJsonLd = [...baseJsonLd, ...jsonLd];
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0a0a0e" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* 검색엔진 소유 확인 (config.ts 에 코드 입력 시 자동 삽입) */}
+    {SITE.googleVerification && (
+      <meta name="google-site-verification" content={SITE.googleVerification} />
+    )}
+    {SITE.naverVerification && (
+      <meta name="naver-site-verification" content={SITE.naverVerification} />
+    )}
+
+    {/* Open Graph / Twitter */}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${SITE.url}/og-default.jpg`} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE.url}/og-default.jpg`} />
+
+    {/* Pretendard — 한글 동적 서브셋 (성능 최적화 버전) */}
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+      crossorigin="anonymous"
+    />
+
+    {/* JSON-LD 구조화 데이터 */}
+    {allJsonLd.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
+
+    {/* GA4 (config.ts 에 ID 입력 시 자동 삽입) */}
+    {SITE.ga4 && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.ga4}`}
+        ></script>
+        <script
+          is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${SITE.ga4}');`}
+        />
+      </>
+    )}
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+    <CallBar />
+
+    {/* Cloudflare Web Analytics (config.ts 에 토큰 입력 시 자동 삽입) */}
+    {SITE.cfBeaconToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${SITE.cfBeaconToken}"}`}
+      ></script>
+    )}
+
+    <script>
+      // 스크롤 리빌 애니메이션 (IntersectionObserver, 초경량)
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

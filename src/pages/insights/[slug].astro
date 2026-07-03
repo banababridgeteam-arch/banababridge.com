@@ -1,0 +1,79 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('insights');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  inLanguage: 'ko',
+  author: { '@id': `${SITE.url}/#organization` },
+  publisher: { '@id': `${SITE.url}/#organization` },
+  mainEntityOfPage: new URL(`/insights/${post.id}/`, SITE.url).href,
+};
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  jsonLd={[articleJsonLd]}
+>
+  <main class="section article-page">
+    <div class="container">
+      <article>
+        <header class="article-header">
+          <a class="back-link" href="/insights/">← Insights</a>
+          <h1>{post.data.title}</h1>
+          <div class="article-meta">
+            <time datetime={post.data.pubDate.toISOString()}>
+              {fmt(post.data.pubDate)}
+            </time>
+            <span>·</span>
+            <span>{SITE.name}</span>
+          </div>
+        </header>
+        <div class="prose">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .article-page { padding-top: calc(var(--header-h) + 64px); }
+  .back-link { font-size: 14px; color: var(--gold); }
+  .article-header h1 {
+    margin-top: 20px;
+    max-width: 760px;
+    font-size: clamp(26px, 4.4vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .article-meta {
+    margin: 18px 0 40px;
+    display: flex;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+</style>

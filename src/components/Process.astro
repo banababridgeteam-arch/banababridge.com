@@ -1,0 +1,93 @@
+---
+const steps = [
+  {
+    num: '01',
+    en: 'VERIFY',
+    ko: '검증',
+    desc: '주최사·베뉴·조건까지 모든 사실을 먼저 확인합니다. 검증 없는 진행은 없습니다.',
+  },
+  {
+    num: '02',
+    en: 'CONTRACT',
+    ko: '계약',
+    desc: '모든 프로젝트는 계약서로 시작합니다. 구두 약속만으로 움직이지 않습니다.',
+  },
+  {
+    num: '03',
+    en: 'EXECUTE',
+    ko: '실행',
+    desc: '섭외·비자·스태프·현지 운영까지, 실행의 디테일을 끝까지 책임집니다.',
+  },
+  {
+    num: '04',
+    en: 'REPORT',
+    ko: '기록',
+    desc: '진행 내역을 문서로 남기고 정산까지 투명하게 공유합니다.',
+  },
+];
+---
+
+<section class="section" id="process">
+  <div class="container">
+    <p class="eyebrow reveal">Process</p>
+    <h2 class="h2 reveal">신뢰는 프로세스에서 나옵니다.</h2>
+
+    <ol class="steps">
+      {steps.map((s) => (
+        <li class="step reveal">
+          <span class="step-num">{s.num}</span>
+          <div>
+            <h3>
+              {s.ko} <small>{s.en}</small>
+            </h3>
+            <p>{s.desc}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    margin-top: 52px;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .step {
+    display: flex;
+    gap: 18px;
+    padding: 32px 26px 32px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .step + .step { border-left: 1px solid var(--line); padding-left: 26px; }
+  .step-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    line-height: 2;
+  }
+  .step h3 { font-size: 18px; letter-spacing: -0.01em; }
+  .step h3 small {
+    margin-left: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .step p { margin-top: 8px; color: var(--muted); font-size: 14.5px; }
+
+  @media (max-width: 1020px) {
+    .steps { grid-template-columns: 1fr 1fr; }
+    .step { padding-left: 0 !important; border-left: none !important; }
+    .step:nth-child(even) { padding-left: 26px !important; border-left: 1px solid var(--line) !important; }
+  }
+  @media (max-width: 560px) {
+    .steps { grid-template-columns: 1fr; }
+    .step:nth-child(even) { padding-left: 0 !important; border-left: none !important; }
+  }
+</style>
