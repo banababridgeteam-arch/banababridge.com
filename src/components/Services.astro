@@ -8,7 +8,6 @@ const t = useTranslations(lang);
 
 <section class="section" id="services">
   <div class="container">
-    <p class="index-label reveal"><span class="num">03</span><span class="txt">{t.services.label}</span></p>
     <SectionHead num="03" text={t.services.head} />
 
     <ol class="svc-list">
@@ -48,7 +47,7 @@ const t = useTranslations(lang);
   .svc-row:hover::before { opacity: 1; }
   .svc-row:hover { padding-left: 18px; }
   .svc-no { font-size: 15px; font-weight: 500; color: var(--gold); font-variant-numeric: tabular-nums; }
-  .svc-title { font-size: clamp(26px, 4.2vw, 58px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; }
+  .svc-title { font-size: clamp(24px, 3vw, 40px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.08; }
   .svc-desc { color: var(--muted); font-size: 15px; line-height: 1.55; }
   .svc-arrow {
     justify-self: end;

@@ -12,17 +12,17 @@ const { num, text, class: cls = '' } = Astro.props;
   .sec-head {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(38px, 8.4vw, 124px);
-    line-height: 1.0;
-    letter-spacing: -0.042em;
+    font-size: clamp(40px, 9.6vw, 144px); /* strove H1 = 144px */
+    line-height: 1.1;
+    letter-spacing: -0.06em; /* strove -8.64px/144px */
   }
   .sec-num {
     font-style: normal;
-    font-size: 0.22em;
+    font-size: 0.2em;
     color: var(--gold);
-    vertical-align: 0.85em;
+    vertical-align: 0.9em;
     letter-spacing: 0.02em;
-    margin-right: 0.35em;
+    margin-right: 0.32em;
     font-weight: 500;
   }
 </style>
