@@ -21,4 +21,4 @@
 ## Insights (실무 콘텐츠)
 
 - [해외 팬미팅은 어떻게 성사되는가](https://banababridge.com/insights/overseas-fanmeeting-process/): 섭외의향서부터 계약, 현장 운영까지
-- [벤더(중간 유통)란 무엇인가](https://banababridge.com/insights/what-is-brand-vendor/): 브랜드와 셀러를 잇는 구조
+- [벤더(중간 유통)란 무엇인가](https://banababridge.com/insights/what-is-brand-vendor/): 브랜드의 판매를 대신 여는 구조

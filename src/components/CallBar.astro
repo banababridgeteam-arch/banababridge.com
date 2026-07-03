@@ -4,13 +4,15 @@ import { SITE } from '../config';
 ---
 
 <div class="callbar" role="complementary" aria-label="빠른 문의">
-  <a class="callbar-btn call" href={`tel:${SITE.phone}`}>
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/>
-    </svg>
-    전화 연결
-  </a>
-  <a class="callbar-btn mail" href={`mailto:${SITE.email}`}>
+  {SITE.phone && (
+    <a class="callbar-btn call" href={`tel:${SITE.phone}`}>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/>
+      </svg>
+      전화 연결
+    </a>
+  )}
+  <a class={`callbar-btn ${SITE.phone ? 'mail' : 'call'}`} href={`mailto:${SITE.email}`}>
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <rect x="3" y="5" width="18" height="14" rx="2"/>
       <path d="m3 7 9 6 9-6"/>

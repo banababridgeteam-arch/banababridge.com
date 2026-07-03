@@ -41,7 +41,7 @@ const baseJsonLd = [
     description: SITE.description,
     foundingDate: SITE.foundingDate,
     email: SITE.email,
-    telephone: SITE.phone,
+    ...(SITE.phone ? { telephone: SITE.phone } : {}),
     address: {
       '@type': 'PostalAddress',
       streetAddress: '대지로 43, 6층 606-746호',
@@ -77,6 +77,17 @@ const allJsonLd = [...baseJsonLd, ...jsonLd];
     <meta name="theme-color" content="#0a0a0e" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="BANABA BRIDGE Insights"
+      href="/rss.xml"
+    />
+
+    {/* JS 미실행 환경에서도 콘텐츠가 보이도록 리빌 애니메이션 무효화 */}
+    <noscript>
+      <style is:inline>.reveal{opacity:1 !important;transform:none !important}</style>
+    </noscript>
 
     {/* 검색엔진 소유 확인 (config.ts 에 코드 입력 시 자동 삽입) */}
     {SITE.googleVerification && (

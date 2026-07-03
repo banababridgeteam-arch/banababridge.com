@@ -38,11 +38,11 @@ docs/
 
 ## 런칭 체크리스트
 
-- [ ] `src/config.ts` — **회사 전화번호 교체** (현재 placeholder)
-- [ ] `public/og-default.jpg` — OG 이미지 (1200×630) 추가 (힉스필드 제작)
+- [ ] `src/config.ts` — **회사 전화번호 입력** (비어 있는 동안은 전화 CTA가 자동으로 이메일 문의로 대체됨. 번호 넣는 순간 전 사이트 전화 버튼 자동 활성화)
+- [x] `public/og-default.jpg` — OG 이미지 (1200×630, 힉스필드 제작 완료)
 - [ ] Cloudflare Pages 배포 + 커스텀 도메인 연결
 - [ ] **Google Search Console** 등록 → 소유확인 코드를 `config.ts`의 `googleVerification`에 → sitemap 제출 (`/sitemap-index.xml`)
-- [ ] **네이버 서치어드바이저** 등록 → `naverVerification`에 코드 입력 → sitemap 제출
+- [ ] **네이버 서치어드바이저** 등록 → `naverVerification`에 코드 입력 → sitemap + **RSS**(`/rss.xml`) 제출
 - [ ] **GA4** 속성 생성 → 측정 ID를 `ga4`에 입력
 - [ ] **Cloudflare Web Analytics** 활성화 → 토큰을 `cfBeaconToken`에 입력
 - [ ] Google Workspace 라우팅 확인 (hosoo@banababridge.com 수발신 테스트, contact@ 별칭 추가 권장)

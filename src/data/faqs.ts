@@ -2,6 +2,7 @@
 // FAQ 데이터 — AEO(답변엔진 최적화) 핵심.
 // index.astro 에서 FAQPage JSON-LD 로도 자동 출력됩니다.
 // ============================================================
+import { SITE } from '../config';
 
 export interface Faq {
   q: string;
@@ -27,6 +28,8 @@ export const faqs: Faq[] = [
   },
   {
     q: '문의는 어떻게 하나요?',
-    a: '전화 또는 이메일(hosoo@banababridge.com)로 문의하실 수 있습니다. 영업일 기준 24시간 이내에 회신드립니다.',
+    a: SITE.phone
+      ? `전화(${SITE.phoneDisplay}) 또는 이메일(${SITE.email})로 문의하실 수 있습니다. 영업일 기준 24시간 이내에 회신드립니다.`
+      : `이메일(${SITE.email})로 문의하실 수 있습니다. 영업일 기준 24시간 이내에 회신드리며, 전화 상담은 이메일로 일정을 조율해 진행합니다.`,
   },
 ];

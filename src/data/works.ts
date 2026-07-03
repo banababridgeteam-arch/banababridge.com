@@ -26,8 +26,9 @@ export const works: Work[] = [
     index: '02',
     category: 'ENTERTAINMENT',
     title: '효민(T-ara) 상하이 팬미팅',
-    desc: '섭외 계약부터 비자·스태프·현지 운영 조율까지 팬미팅 전 과정을 에이전시로 진행했습니다.',
+    desc: '섭외 계약부터 비자·스태프·현지 운영 조율까지 팬미팅 전 과정을 에이전시로 진행하고 있습니다.',
     year: '2026.07',
+    status: '개최 예정', // TODO: 행사(7/24) 종료 후 과거형으로 변경 + status 제거
   },
   {
     index: '03',
