@@ -3,6 +3,7 @@ import { SITE } from '../config';
 ---
 
 <section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
   <canvas id="bridge-canvas" aria-hidden="true"></canvas>
   <div class="hero-glow" aria-hidden="true"></div>
 
@@ -56,6 +57,23 @@ import { SITE } from '../config';
     align-items: center;
     padding: calc(var(--header-h) + 40px) 0 80px;
     overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('/og-default.jpg') center / cover no-repeat;
+    opacity: 0.5;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 14, 0.55) 0%,
+      rgba(10, 10, 14, 0.35) 45%,
+      rgba(10, 10, 14, 0.92) 100%
+    );
   }
   #bridge-canvas {
     position: absolute;
