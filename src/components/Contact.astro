@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../config';
+import SectionHead from './SectionHead.astro';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 
 interface Props { lang?: Lang }
@@ -10,7 +11,7 @@ const t = useTranslations(lang);
 <section class="section contact" id="contact">
   <div class="container">
     <p class="index-label reveal"><span class="num">04</span><span class="txt">{t.contact.label}</span></p>
-    <h2 class="display h-lg reveal mask-head"><span class="ml"><span>{t.contact.head}</span></span></h2>
+    <SectionHead num="04" text={t.contact.head} />
     <p class="lead reveal">{t.contact.body}</p>
 
     <div class="contact-actions reveal">

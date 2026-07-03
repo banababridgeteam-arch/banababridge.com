@@ -8,6 +8,7 @@ import {
   localizePath,
   useTranslations,
 } from '../i18n/ui';
+import Logo from './Logo.astro';
 
 interface Props {
   lang?: Lang;
@@ -28,9 +29,7 @@ const nav = [
 
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a href={p('/')} class="logo" aria-label="BANABA BRIDGE">
-      BANABA<span>BRIDGE</span>
-    </a>
+    <Logo href={p('/')} />
 
     <nav class="nav" id="site-nav" aria-label="Main">
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}

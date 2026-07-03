@@ -1,4 +1,5 @@
 ---
+import SectionHead from './SectionHead.astro';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 interface Props { lang?: Lang }
 const { lang = defaultLang } = Astro.props;
@@ -8,7 +9,7 @@ const t = useTranslations(lang);
 <section class="section" id="services">
   <div class="container">
     <p class="index-label reveal"><span class="num">03</span><span class="txt">{t.services.label}</span></p>
-    <h2 class="display h-lg reveal mask-head"><span class="ml"><span>{t.services.head}</span></span></h2>
+    <SectionHead num="03" text={t.services.head} />
 
     <ol class="svc-list">
       {t.services.items.map((s) => (
@@ -16,6 +17,7 @@ const t = useTranslations(lang);
           <span class="svc-no">{s.no}</span>
           <span class="svc-title display">{s.title}</span>
           <span class="svc-desc">{s.desc}</span>
+          <span class="svc-arrow" aria-hidden="true">→</span>
         </li>
       ))}
     </ol>
@@ -23,23 +25,44 @@ const t = useTranslations(lang);
 </section>
 
 <style>
-  .svc-list { list-style: none; margin-top: clamp(36px, 5vw, 64px); border-top: 1px solid var(--line); }
+  .svc-list { list-style: none; margin-top: clamp(44px, 6vw, 88px); border-top: 1px solid var(--line); }
   .svc-row {
+    position: relative;
     display: grid;
-    grid-template-columns: 64px 1fr minmax(0, 34ch);
+    grid-template-columns: 68px 1fr minmax(0, 32ch) 40px;
     align-items: center;
-    gap: 24px;
-    padding: clamp(24px, 3.4vw, 40px) 0;
+    gap: 28px;
+    padding: clamp(30px, 4.2vw, 56px) 0;
     border-bottom: 1px solid var(--line);
-    transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1);
+    transition: padding-left 0.4s cubic-bezier(0.22,1,0.36,1), background 0.4s ease;
   }
-  .svc-row:hover { padding-left: 14px; }
-  .svc-no { font-size: 14px; font-weight: 500; color: var(--gold); font-variant-numeric: tabular-nums; }
-  .svc-title { font-size: clamp(22px, 3vw, 40px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
-  .svc-desc { color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+  .svc-row::before {
+    content: '';
+    position: absolute;
+    left: -100vw; right: -100vw; top: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(201,162,94,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .svc-row:hover::before { opacity: 1; }
+  .svc-row:hover { padding-left: 18px; }
+  .svc-no { font-size: 15px; font-weight: 500; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .svc-title { font-size: clamp(26px, 4.2vw, 58px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; }
+  .svc-desc { color: var(--muted); font-size: 15px; line-height: 1.55; }
+  .svc-arrow {
+    justify-self: end;
+    font-size: 22px;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .svc-row:hover .svc-arrow { opacity: 1; transform: none; }
 
-  @media (max-width: 820px) {
-    .svc-row { grid-template-columns: 40px 1fr; row-gap: 10px; align-items: baseline; }
+  @media (max-width: 860px) {
+    .svc-row { grid-template-columns: 40px 1fr; row-gap: 12px; align-items: baseline; }
     .svc-desc { grid-column: 2; }
+    .svc-arrow { display: none; }
   }
 </style>

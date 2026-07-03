@@ -1,0 +1,28 @@
+---
+// strove 스타일 초대형 섹션 헤딩 — "(02) 문장."
+interface Props { num: string; text: string; class?: string }
+const { num, text, class: cls = '' } = Astro.props;
+---
+
+<h2 class={`sec-head reveal mask-head ${cls}`}>
+  <span class="ml"><span><em class="sec-num">({num})</em>{text}</span></span>
+</h2>
+
+<style>
+  .sec-head {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(38px, 8.4vw, 124px);
+    line-height: 1.0;
+    letter-spacing: -0.042em;
+  }
+  .sec-num {
+    font-style: normal;
+    font-size: 0.22em;
+    color: var(--gold);
+    vertical-align: 0.85em;
+    letter-spacing: 0.02em;
+    margin-right: 0.35em;
+    font-weight: 500;
+  }
+</style>

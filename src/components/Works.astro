@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { works } from '../data/works';
 import sundriesLogo from '../assets/brand/sundries-logo.png';
+import SectionHead from './SectionHead.astro';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 
 interface Props { lang?: Lang }
@@ -24,7 +25,7 @@ const rest = works.filter((w) => !w.featured);
 <section class="section" id="work">
   <div class="container">
     <p class="index-label reveal"><span class="num">02</span><span class="txt">{t.work.label}</span></p>
-    <h2 class="display h-lg reveal mask-head"><span class="ml"><span>{t.work.head}</span></span></h2>
+    <SectionHead num="02" text={t.work.head} />
 
     {featured && (
       <article class="featured reveal">

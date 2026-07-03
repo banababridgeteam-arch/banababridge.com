@@ -10,13 +10,14 @@ const t = useTranslations(lang);
 ---
 
 <section class="hero" id="top">
-  <div class="hero-glow" aria-hidden="true"></div>
+  <Image class="hero-img" src={heroImg} alt="" width={1600} fetchpriority="high" loading="eager" />
+  <div class="hero-overlay" aria-hidden="true"></div>
 
   <div class="container hero-inner">
-    <div class="hero-text">
+    <div class="hero-top">
       <p class="hero-badge reveal">{t.hero.badge}</p>
 
-      <h1 class="display h-xl hero-title reveal mask-head">
+      <h1 class="hero-title reveal mask-head">
         <span class="ml"><span>{t.hero.line1}</span></span>
         <span class="ml"><span>{t.hero.line2}</span></span>
       </h1>
@@ -25,8 +26,6 @@ const t = useTranslations(lang);
         <span class="recent-label">{t.hero.recent}</span>
         <span class="typing" id="typing" data-words={JSON.stringify(t.hero.rotate)}></span><span class="caret" aria-hidden="true"></span>
       </p>
-
-      <p class="lead hero-sub reveal">{t.hero.sub}</p>
 
       <div class="hero-cta reveal">
         {SITE.phone ? (
@@ -38,11 +37,7 @@ const t = useTranslations(lang);
       </div>
     </div>
 
-    <div class="hero-figure reveal" data-cursor>
-      <Image src={heroImg} alt="" width={880} fetchpriority="high" loading="eager" />
-      <span class="fig-a" aria-hidden="true">A</span>
-      <span class="fig-b" aria-hidden="true">B</span>
-    </div>
+    <div class="hero-wordmark" aria-hidden="true">BANABA BRIDGE<span>®</span></div>
   </div>
 
   <span class="scroll-tag" aria-hidden="true">{t.hero.scroll}</span>
@@ -53,25 +48,35 @@ const t = useTranslations(lang);
     position: relative;
     min-height: 100svh;
     display: flex;
-    align-items: center;
-    padding: calc(var(--header-h) + 40px) 0 90px;
     overflow: hidden;
+    background: #000;
   }
-  .hero-glow {
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.9;
+  }
+  .hero-overlay {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(52% 50% at 78% 42%, rgba(201,162,94,0.16), transparent 68%),
-      radial-gradient(40% 40% at 12% 80%, rgba(201,162,94,0.06), transparent 70%);
-    pointer-events: none;
+      linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 38%, rgba(0,0,0,0.55) 68%, rgba(0,0,0,0.96) 100%),
+      radial-gradient(60% 60% at 20% 30%, rgba(0,0,0,0.5), transparent 70%);
   }
+
   .hero-inner {
     position: relative;
     z-index: 2;
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
-    gap: clamp(32px, 5vw, 72px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: calc(var(--header-h) + 42px);
+    padding-bottom: clamp(6px, 3vw, 30px);
   }
 
   .hero-badge {
@@ -81,11 +86,19 @@ const t = useTranslations(lang);
     text-transform: uppercase;
     color: var(--gold);
   }
-  .hero-title { margin-top: 22px; }
+  .hero-title {
+    margin-top: 20px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(32px, 5.4vw, 74px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    max-width: 15ch;
+  }
   .hero-title .ml:last-child > span { color: var(--ink-dim); }
 
   .hero-recent {
-    margin-top: 26px;
+    margin-top: 22px;
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
@@ -97,7 +110,7 @@ const t = useTranslations(lang);
     font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--ink-dim);
     border: 1px solid var(--line-strong);
     border-radius: 999px;
     padding: 4px 11px;
@@ -105,8 +118,7 @@ const t = useTranslations(lang);
   .typing { color: var(--gold-soft); font-weight: 500; min-height: 1em; }
   .caret {
     display: inline-block;
-    width: 2px;
-    height: 1.05em;
+    width: 2px; height: 1.05em;
     margin-left: 2px;
     background: var(--gold);
     transform: translateY(3px);
@@ -114,87 +126,57 @@ const t = useTranslations(lang);
   }
   @keyframes blink { 50% { opacity: 0; } }
 
-  .hero-sub { margin-top: 24px; }
-  .hero-cta { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
 
-  .hero-figure {
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    box-shadow: 0 40px 120px -40px rgba(0,0,0,0.9);
-    animation: float 7s ease-in-out infinite;
-  }
-  .hero-figure :global(img) { width: 100%; height: auto; display: block; }
-  .fig-a, .fig-b {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+  /* 하단 거대 워드마크 (strove 시그니처) */
+  .hero-wordmark {
+    margin-top: clamp(48px, 8vw, 100px);
     font-family: var(--font-display);
-    font-size: clamp(20px, 2.4vw, 34px);
     font-weight: 700;
-    color: var(--gold-soft);
-    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    font-size: clamp(40px, 12vw, 224px);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    color: var(--ink);
+    opacity: 0.97;
   }
-  .fig-a { left: 18px; }
-  .fig-b { right: 18px; }
-  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero-wordmark span { color: var(--gold); font-size: 0.28em; vertical-align: top; }
 
   .scroll-tag {
     position: absolute;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 26px;
+    right: var(--gutter);
     font-size: 11px;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--muted);
-    z-index: 2;
+    color: var(--ink-dim);
+    z-index: 3;
   }
-  .scroll-tag::after {
-    content: '';
-    display: block;
-    width: 1px; height: 24px;
-    margin: 8px auto 0;
-    background: linear-gradient(var(--gold), transparent);
-    animation: drop 1.9s ease-in-out infinite;
-    transform-origin: top;
-  }
-  @keyframes drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
-
-  @media (max-width: 900px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-    .hero-figure { order: 2; max-width: 560px; }
+  @media (max-width: 640px) {
+    .hero-wordmark { font-size: 15vw; white-space: normal; }
     .scroll-tag { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-figure { animation: none; }
-    .caret { animation: none; }
-    .scroll-tag::after { animation: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
 </style>
 
 <script>
-  // 타이핑 애니메이션 — 최근 진행 프로젝트를 순환 (홍콩 티파니 / 효민 상하이·호치민 / SPECULUM×SEVENTEEN)
+  // 타이핑 애니메이션 — 최근 진행 프로젝트 순환
   const el = document.getElementById('typing');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (el && el.dataset.words) {
     let words: string[] = [];
     try { words = JSON.parse(el.dataset.words); } catch {}
     if (words.length) {
-      if (reduce) {
-        el.textContent = words[0];
-      } else {
+      if (reduce) { el.textContent = words[0]; }
+      else {
         let wi = 0, ci = 0, deleting = false;
         const tick = () => {
           const word = words[wi];
           if (!deleting) {
-            ci++;
-            el.textContent = word.slice(0, ci);
+            ci++; el.textContent = word.slice(0, ci);
             if (ci === word.length) { deleting = true; return setTimeout(tick, 1600); }
           } else {
-            ci--;
-            el.textContent = word.slice(0, ci);
+            ci--; el.textContent = word.slice(0, ci);
             if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
           }
           setTimeout(tick, deleting ? 34 : 68);
