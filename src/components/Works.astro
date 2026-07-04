@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { works } from '../data/works';
 import sundriesLogo from '../assets/brand/sundries-logo.png';
@@ -17,9 +17,21 @@ const findImage = (name?: string) =>
 const statusText = (k?: string) =>
   k === 'ongoing' ? t.work.ongoing : k === 'upcoming' ? t.work.upcoming : k === 'comingSoon' ? t.work.comingSoon : null;
 
+const resolve = async (meta: ImageMetadata | null) =>
+  meta ? (await getImage({ src: meta, width: 560 })).src : null;
+
 const featured = works.find((w) => w.featured);
 const featuredImg = findImage(featured?.image);
 const rest = works.filter((w) => !w.featured);
+
+// 호버 리빌·모바일 썸네일용 이미지 URL 미리 해결
+const rows = await Promise.all(
+  rest.map(async (w) => ({
+    w,
+    st: statusText(w.statusKey),
+    imgSrc: w.image ? await resolve(findImage(w.image)) : w.brandLogo ? await resolve(sundriesLogo) : null,
+  }))
+);
 ---
 
 <section class="section" id="work">
@@ -47,37 +59,28 @@ const rest = works.filter((w) => !w.featured);
       </article>
     )}
 
-    <div class="work-grid">
-      {rest.map((w) => {
-        const img = findImage(w.image);
-        const st = statusText(w.statusKey);
+    {/* strove식 프로젝트 인덱스 — 호버 시 커서 옆에 이미지 리빌 */}
+    <div class="work-index" id="work-index">
+      {rows.map(({ w, st, imgSrc }) => {
         const Tag = w.link ? 'a' : 'div';
         const linkAttrs = w.link ? { href: w.link, target: '_blank', rel: 'noopener' } : {};
         return (
-          <Tag class="work-card reveal" {...linkAttrs}>
-            {img ? (
-              <div class="wc-media">
-                <Image src={img} alt={w.title[lang]} width={720} loading="lazy" />
-                {w.link && <span class="wc-go" aria-hidden="true">↗</span>}
-              </div>
-            ) : (
-              <div class="wc-media brand">
-                <Image src={sundriesLogo} alt={w.title[lang]} width={440} loading="lazy" />
-              </div>
-            )}
-            <div class="wc-body">
-              <span class="wc-cat">{w.category}</span>
-              <h3>{w.title[lang]}</h3>
-              <div class="wc-meta">
-                <span>{w.year}</span>
-                {st && <span class="wc-status">{st}</span>}
-              </div>
-            </div>
+          <Tag class="work-row reveal" data-img={imgSrc} {...linkAttrs}>
+            <span class="wr-no">{w.index}</span>
+            {imgSrc && <img class="wr-thumb" src={imgSrc} alt="" width="120" height="150" loading="lazy" decoding="async" />}
+            <span class="wr-title">{w.title[lang]}</span>
+            <span class="wr-meta">
+              {w.year}{w.location ? ` · ${w.location}` : ''}{st ? ` · ${st}` : ''}
+            </span>
+            <span class="wr-go" aria-hidden="true">{w.link ? '↗' : ''}</span>
           </Tag>
         );
       })}
     </div>
   </div>
+
+  {/* 커서 추적 리빌 이미지 (데스크톱) */}
+  <div class="work-peek" id="work-peek" aria-hidden="true"><img alt="" decoding="async" /></div>
 </section>
 
 <style>
@@ -114,57 +117,123 @@ const rest = works.filter((w) => !w.featured);
   }
   .feat-ig:hover { border-color: var(--gold); color: var(--gold-soft); }
 
-  /* 그리드 카드 */
-  .work-grid {
-    margin-top: clamp(40px, 6vw, 80px);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-    gap: clamp(20px, 2.4vw, 36px);
+  /* 프로젝트 인덱스 */
+  .work-index {
+    margin-top: clamp(44px, 6vw, 88px);
+    border-top: 1px solid var(--line);
   }
-  .work-card { display: flex; flex-direction: column; }
-  a.work-card { color: inherit; }
-  .wc-media {
+  .work-row {
     position: relative;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    background: var(--bg-3);
+    display: grid;
+    grid-template-columns: 54px 1fr minmax(0, auto) 34px;
+    align-items: center;
+    gap: 20px;
+    padding: clamp(22px, 2.8vw, 38px) 0;
+    border-bottom: 1px solid var(--line);
+    color: inherit;
+    transition: padding-left 0.4s cubic-bezier(0.22,1,0.36,1), color 0.3s ease;
   }
-  .wc-go {
-    position: absolute;
-    top: 12px; right: 12px;
-    width: 34px; height: 34px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(6px);
-    color: var(--gold-soft);
-    font-size: 15px;
-    opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  a.work-row:hover { padding-left: 16px; }
+  .wr-no { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--gold); }
+  .wr-title {
+    font-family: var(--font-display);
+    font-size: clamp(21px, 2.9vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    transition: color 0.3s ease;
   }
-  .work-card:hover .wc-go { opacity: 1; transform: none; }
-  .wc-media :global(img) {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
-  }
-  .work-card:hover .wc-media :global(img) { transform: scale(1.05); }
-  .wc-media.brand {
-    display: flex; align-items: center; justify-content: center; padding: 16%;
-    background: radial-gradient(80% 80% at 50% 20%, rgba(201,162,94,0.14), transparent 65%), linear-gradient(180deg,#101013,#050506);
-  }
-  .wc-media.brand :global(img) { width: 100%; height: auto; object-fit: contain; transition: none; }
+  a.work-row:hover .wr-title { color: var(--gold-soft); }
+  .wr-meta { font-size: 13px; color: var(--muted); letter-spacing: 0.03em; white-space: nowrap; }
+  .wr-go { justify-self: end; font-size: 18px; color: var(--gold); opacity: 0.5; transition: opacity 0.3s ease, transform 0.3s ease; }
+  a.work-row:hover .wr-go { opacity: 1; transform: translate(3px, -3px); }
+  .wr-thumb { display: none; }
 
-  .wc-body { padding-top: 18px; }
-  .wc-cat { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; color: var(--muted); }
-  .wc-body h3 { margin-top: 10px; font-size: 17px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.4; }
-  .wc-meta { margin-top: 14px; display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-dim); }
-  .wc-status { color: var(--gold); font-weight: 600; }
+  /* 커서 추적 리빌 이미지 */
+  .work-peek {
+    position: fixed;
+    top: 0; left: 0;
+    width: clamp(220px, 22vw, 360px);
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 40px 90px -40px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.92) rotate(-3deg);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    will-change: transform;
+  }
+  .work-peek.show { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  .work-peek img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* 모바일·터치: 리빌 대신 인라인 썸네일 */
+  @media (hover: none), (max-width: 880px) {
+    .work-peek { display: none; }
+    .work-row {
+      grid-template-columns: 64px 1fr 22px;
+      grid-template-areas: 'thumb title go' 'thumb meta go';
+      row-gap: 6px;
+      column-gap: 16px;
+    }
+    .wr-no { display: none; }
+    .wr-thumb {
+      display: block;
+      grid-area: thumb;
+      width: 64px; height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .wr-title { grid-area: title; font-size: 18px; }
+    .wr-meta { grid-area: meta; white-space: normal; }
+    .wr-go { grid-area: go; align-self: center; }
+  }
 
   @media (max-width: 820px) {
     .featured { grid-template-columns: 1fr; }
     .featured-media video { aspect-ratio: 16 / 11; }
   }
 </style>
+
+<script>
+  // 커서 추적 hover-reveal (데스크톱 · hover 가능 기기)
+  const peek = document.getElementById('work-peek');
+  const peekImg = peek?.querySelector('img') as HTMLImageElement | null;
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('#work-index .work-row[data-img]'));
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (peek && peekImg && rows.length && fine) {
+    let tx = innerWidth / 2, ty = innerHeight / 2, x = tx, y = ty, raf = 0, active = false;
+
+    const loop = () => {
+      x += (tx - x) * 0.16;
+      y += (ty - y) * 0.16;
+      peek.style.transform =
+        `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${active ? 1 : 0.92}) rotate(${active ? 0 : -3}deg)`;
+      if (active || Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) {
+        raf = requestAnimationFrame(loop);
+      } else { raf = 0; }
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+
+    addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; if (active) kick(); }, { passive: true });
+
+    rows.forEach((row) => {
+      const src = row.dataset.img!;
+      row.addEventListener('mouseenter', () => {
+        if (peekImg.getAttribute('src') !== src) peekImg.src = src;
+        active = true;
+        peek.classList.add('show');
+        kick();
+      });
+      row.addEventListener('mouseleave', () => {
+        active = false;
+        peek.classList.remove('show');
+        kick();
+      });
+    });
+  }
+</script>
