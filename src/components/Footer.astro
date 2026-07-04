@@ -52,10 +52,13 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
 </footer>
 
 <style>
-  /* strove식 대비 푸터 — 블랙 사이트에 골드로 반전 */
+  /* 대비 푸터 — 나이트 가든의 '여명(dawn)' : 문라이트 라일락 패널 */
   .site-footer {
-    background: linear-gradient(180deg, #d3ad63 0%, #c49a52 100%);
-    color: #1a1409;
+    --ftxt: #1b1533;            /* 딥 플럼 (밝은 배경 위 텍스트) */
+    --fmuted: rgba(27, 21, 51, 0.56);
+    --fline: rgba(27, 21, 51, 0.2);
+    background: linear-gradient(165deg, #cabce9 0%, #d6c0e2 52%, #e0c4dc 100%);
+    color: var(--ftxt);
     overflow: hidden;
   }
   .footer-inner { padding-top: clamp(48px, 6vw, 88px); padding-bottom: 32px; }
@@ -67,7 +70,7 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     gap: 32px;
     flex-wrap: wrap;
     padding-bottom: clamp(40px, 5vw, 72px);
-    border-bottom: 1px solid rgba(26, 20, 9, 0.22);
+    border-bottom: 1px solid var(--fline);
   }
   .footer-back {
     display: inline-flex;
@@ -75,15 +78,15 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     gap: 10px;
     padding: 12px 22px;
     border-radius: 999px;
-    background: #14100a;
-    color: #f4e9d2;
+    background: #17122e;
+    color: #ece7fb;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 15px;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
   }
-  .footer-back:hover { transform: translateY(-2px); background: #0d0a06; }
-  .footer-back .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-soft); }
+  .footer-back:hover { transform: translateY(-2px); background: #0f0b22; }
+  .footer-back .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); }
   .footer-tag {
     max-width: 20ch;
     text-align: right;
@@ -92,7 +95,7 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     font-size: clamp(18px, 2.2vw, 28px);
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: #1a1409;
+    color: var(--ftxt);
   }
 
   .footer-links {
@@ -108,7 +111,7 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(26, 20, 9, 0.55);
+    color: var(--fmuted);
     margin-bottom: 16px;
   }
   .fl-col a {
@@ -116,7 +119,7 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     padding: 5px 0;
     font-size: 16px;
     font-weight: 500;
-    color: #1a1409;
+    color: var(--ftxt);
     transition: opacity 0.2s ease;
   }
   .fl-col a:hover { opacity: 0.6; }
@@ -130,9 +133,9 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     line-height: 0.82;
     letter-spacing: -0.055em;
     white-space: nowrap;
-    color: #14100a;
+    color: #17122e;
   }
-  .footer-wordmark span { color: #f4e9d2; font-size: 0.24em; vertical-align: 0.42em; margin-left: 0.04em; }
+  .footer-wordmark span { color: var(--violet); font-size: 0.24em; vertical-align: 0.42em; margin-left: 0.04em; }
   @media (max-width: 720px) {
     .footer-wordmark { white-space: normal; font-size: clamp(40px, 15vw, 120px); line-height: 0.9; }
   }
@@ -143,9 +146,9 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     gap: 20px;
     flex-wrap: wrap;
     padding-top: 22px;
-    border-top: 1px solid rgba(26, 20, 9, 0.22);
+    border-top: 1px solid var(--fline);
     font-size: 12.5px;
-    color: rgba(26, 20, 9, 0.7);
+    color: var(--fmuted);
   }
 
   @media (max-width: 720px) {

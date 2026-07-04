@@ -1,4 +1,7 @@
 ---
+// 셀프호스트 폰트 (외부 CDN 제거 → 렌더블로킹·프라이버시 개선). Inter=opsz+wght 가변, Pretendard=동적 서브셋
+import '@fontsource-variable/inter/standard.css';
+import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import { SITE } from '../config';
 import {
   type Lang,
@@ -127,18 +130,7 @@ const allJsonLd = [...baseJsonLd, ...jsonLd];
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={`${SITE.url}/og-default.jpg`} />
 
-    {/* Inter (라틴 대형 타이포) + Pretendard (한글). 중문은 시스템 CJK 폰트 */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-      crossorigin="anonymous"
-    />
+    {/* 폰트는 셀프호스트(@fontsource Inter + pretendard) — Base 프론트매터에서 import. 외부 CDN 미사용 */}
 
     <noscript>
       <style is:inline>.reveal{opacity:1 !important;transform:none !important}.mask-head .ml>span{transform:none !important}</style>
