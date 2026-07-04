@@ -4,64 +4,194 @@ import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 interface Props { lang?: Lang }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
+
+// 각 서비스의 대형 이니셜 마크 (언어 무관)
+const abbr = ['E', 'F', 'A', 'D', 'AX'];
 ---
 
-<section class="section" id="services">
+<section class="svc section" id="services">
   <div class="container">
     <SectionHead num="03" text={t.services.head} />
+  </div>
 
-    <ol class="svc-list">
-      {t.services.items.map((s) => (
-        <li class="svc-row reveal">
-          <span class="svc-no">{s.no}</span>
-          <span class="svc-title display">{s.title}</span>
-          <span class="svc-desc">{s.desc}</span>
-          <span class="svc-arrow" aria-hidden="true">→</span>
-        </li>
-      ))}
-    </ol>
+  <div class="svc-scroll" id="svc-scroll">
+    <div class="svc-pin">
+      <div class="svc-stage" id="svc-stage">
+        {t.services.items.map((s, i) => (
+          <article class="svc-card" data-i={i}>
+            <div class="svc-card-top">
+              <span class="svc-no">{s.no}</span>
+              <span class="svc-cat">SERVICE</span>
+            </div>
+            <span class="svc-abbr" aria-hidden="true">{abbr[i]}</span>
+            <div class="svc-card-body">
+              <h3 class="svc-title">{s.title}</h3>
+              <p class="svc-desc">{s.desc}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="svc-dots" id="svc-dots" aria-hidden="true">
+        {t.services.items.map((_, i) => <span data-d={i}></span>)}
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .svc-list { list-style: none; margin-top: clamp(44px, 6vw, 88px); border-top: 1px solid var(--line); }
-  .svc-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 68px 1fr minmax(0, 32ch) 40px;
-    align-items: center;
-    gap: 28px;
-    padding: clamp(30px, 4.2vw, 56px) 0;
-    border-bottom: 1px solid var(--line);
-    transition: padding-left 0.4s cubic-bezier(0.22,1,0.36,1), background 0.4s ease;
-  }
-  .svc-row::before {
-    content: '';
-    position: absolute;
-    left: -100vw; right: -100vw; top: 0; bottom: 0;
-    background: linear-gradient(180deg, rgba(201,162,94,0.06), transparent);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-  .svc-row:hover::before { opacity: 1; }
-  .svc-row:hover { padding-left: 18px; }
-  .svc-no { font-size: 15px; font-weight: 500; color: var(--gold); font-variant-numeric: tabular-nums; }
-  .svc-title { font-size: clamp(24px, 3vw, 40px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.08; }
-  .svc-desc { color: var(--muted); font-size: 15px; line-height: 1.55; }
-  .svc-arrow {
-    justify-self: end;
-    font-size: 22px;
-    color: var(--gold);
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .svc-row:hover .svc-arrow { opacity: 1; transform: none; }
+  .svc { padding-bottom: 0; }
 
-  @media (max-width: 860px) {
-    .svc-row { grid-template-columns: 40px 1fr; row-gap: 12px; align-items: baseline; }
-    .svc-desc { grid-column: 2; }
-    .svc-arrow { display: none; }
+  .svc-scroll { position: relative; }
+  .svc-pin {
+    display: grid;
+    place-items: center;
+    padding: clamp(48px, 7vw, 96px) 0;
+  }
+  .svc-stage {
+    position: relative;
+    width: min(760px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* 카드 (기본 = 세로 리스트 폴백: JS·데스크톱 아니면 이대로) */
+  .svc-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(28px, 5vw, 64px);
+    min-height: 240px;
+    padding: clamp(26px, 3.4vw, 46px);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background:
+      radial-gradient(120% 120% at 85% 0%, rgba(201,162,94,0.10), transparent 55%),
+      linear-gradient(180deg, var(--bg-2), var(--bg-3));
+    overflow: hidden;
+  }
+  .svc-card-top { display: flex; justify-content: space-between; align-items: center; }
+  .svc-no { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--gold); }
+  .svc-cat { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; color: var(--muted); }
+  .svc-abbr {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(96px, 15vw, 180px);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    background: linear-gradient(160deg, var(--gold-soft), var(--gold) 55%, rgba(201,162,94,0.35));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    align-self: flex-start;
+  }
+  .svc-card-body { }
+  .svc-title { font-family: var(--font-display); font-size: clamp(24px, 3vw, 40px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; }
+  .svc-desc { margin-top: 12px; max-width: 46ch; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+  .svc-dots { display: none; }
+
+  /* ============ 3D 롤로덱스 (JS가 .is3d 부여 시) ============ */
+  .svc-scroll.is3d { height: 380vh; }
+  .svc-scroll.is3d .svc-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    perspective: 1600px;
+    overflow: hidden;
+    padding: 0;
+  }
+  .svc-scroll.is3d .svc-stage {
+    height: min(66vh, 560px);
+    transform-style: preserve-3d;
+    display: block;
+  }
+  .svc-scroll.is3d .svc-card {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    min-height: 0;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    will-change: transform, opacity;
+    box-shadow: 0 50px 120px -50px rgba(0,0,0,0.85);
+  }
+  .svc-scroll.is3d .svc-abbr { font-size: clamp(120px, 20vw, 240px); }
+  .svc-scroll.is3d .svc-dots {
+    position: absolute;
+    bottom: clamp(20px, 4vh, 44px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+  .svc-scroll.is3d .svc-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--line-strong);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .svc-scroll.is3d .svc-dots span.on { background: var(--gold); transform: scale(1.35); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-scroll.is3d { height: auto; }
+    .svc-scroll.is3d .svc-pin { position: static; height: auto; perspective: none; overflow: visible; padding: clamp(48px,7vw,96px) 0; }
+    .svc-scroll.is3d .svc-stage { height: auto; display: flex; }
+    .svc-scroll.is3d .svc-card { position: relative; inset: auto; min-height: 240px; transform: none !important; opacity: 1 !important; }
+    .svc-scroll.is3d .svc-dots { display: none; }
   }
 </style>
+
+<script>
+  const scroll = document.getElementById('svc-scroll');
+  const stage = document.getElementById('svc-stage');
+  const dotsWrap = document.getElementById('svc-dots');
+  const cards = stage ? Array.from(stage.querySelectorAll<HTMLElement>('.svc-card')) : [];
+  const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll<HTMLElement>('span')) : [];
+  const N = cards.length;
+
+  const capable =
+    matchMedia('(min-width: 880px) and (hover: hover)').matches &&
+    !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (scroll && stage && N > 1 && capable) {
+    scroll.classList.add('is3d');
+
+    let ticking = false;
+    const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+
+    function render() {
+      ticking = false;
+      const rect = scroll!.getBoundingClientRect();
+      const total = rect.height - innerHeight; // 핀 구간 총 스크롤량
+      const progress = clamp(-rect.top / (total || 1), 0, 1);
+      const current = progress * (N - 1); // 0 → N-1
+
+      let active = 0;
+      let bestZ = -1;
+      cards.forEach((card, i) => {
+        const d = i - current; // 현재 카드와의 거리(음수=지나감)
+        const ad = Math.abs(d);
+        const angle = clamp(d * 58, -90, 90); // rotateY
+        const tz = -ad * 140; // 뒤로
+        const tx = d * 26; // 살짝 옆으로
+        const ty = -ad * 8;
+        const opacity = clamp(1 - ad * 0.85, 0, 1);
+        card.style.transform =
+          `translateX(${tx}px) translateY(${ty}px) translateZ(${tz}px) rotateY(${angle}deg)`;
+        card.style.opacity = String(opacity);
+        const z = 100 - Math.round(ad * 10);
+        card.style.zIndex = String(z);
+        if (z > bestZ) { bestZ = z; active = i; }
+      });
+      dots.forEach((dot, i) => dot.classList.toggle('on', i === active));
+    }
+
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(render); }
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    render();
+  }
+</script>
