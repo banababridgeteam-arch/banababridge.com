@@ -82,6 +82,17 @@ const N = t.services.items.length;
   .card-desc { margin-top: 12px; color: var(--ink-dim); font-size: 14.5px; line-height: 1.6; max-width: 34ch; }
   .svc-dots { display: none; }
 
+  /* 모바일/태블릿: 스크롤 진입 시 카드가 3D로 '딜'되며 나타남 (JS가 .anim 부여) */
+  .svc-card.anim {
+    opacity: 0;
+    transform: perspective(900px) rotateX(11deg) translateY(42px);
+    transform-origin: center bottom;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .svc-card.anim.in { opacity: 1; transform: none; }
+
   /* ── 데스크톱: 스크롤 구동 3D 회전 카드 팬 ── */
   @media (min-width: 880px) and (hover: hover) {
     .svc-3d { height: calc(100vh + (var(--n) - 1) * 46vh); padding: 0; }
@@ -141,16 +152,32 @@ const N = t.services.items.length;
     const mq = matchMedia('(min-width: 880px) and (hover: hover)');
     const reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
 
-    // 튜닝 파라미터
-    const ANGLE = 30;   // deg / step
-    const XVW = 15;     // 가로 확산 (vw)
-    const YVH = 7;      // 세로 확산 (vh)
-    const ZPX = 130;    // 원근 후퇴 (px)
+    // 데스크톱 팬 튜닝
+    const ANGLE = 30, XVW = 15, YVH = 7, ZPX = 130;
 
     let raf = 0;
-    let wasActive = false;
+    let mode: 'fan' | 'stack' | null = null;
+    let io: IntersectionObserver | null = null;
 
-    const reset = () => {
+    // 데스크톱: 스크롤 구동 3D 팬 (매 프레임)
+    const applyFan = () => {
+      raf = 0;
+      const rect = section.getBoundingClientRect();
+      const total = section.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const p = total > 0 ? (scrolled / total) * (N - 1) : 0;
+      const focus = Math.round(p);
+      for (let i = 0; i < N; i++) {
+        const d = i - p, ad = Math.abs(d), c = cards[i];
+        c.style.transform = `translate3d(${-d * XVW}vw, ${d * YVH}vh, ${-ad * ZPX}px) rotateY(${d * ANGLE}deg)`;
+        c.style.opacity = String(Math.max(0.04, 1 - ad * 0.36));
+        c.style.zIndex = String(200 - Math.round(ad * 20));
+        c.style.pointerEvents = i === focus ? 'auto' : 'none';
+        c.classList.toggle('focus', i === focus);
+      }
+      dots.forEach((dt, i) => dt.classList.toggle('on', i === focus));
+    };
+    const clearFanInline = () => {
       for (const c of cards) {
         c.style.transform = ''; c.style.opacity = ''; c.style.zIndex = '';
         c.style.pointerEvents = ''; c.classList.remove('focus');
@@ -158,35 +185,37 @@ const N = t.services.items.length;
       dots.forEach((d) => d.classList.remove('on'));
     };
 
-    // 매 프레임 미디어쿼리를 확인 → 자기보정(뷰포트 0/브레이크포인트 전환에도 안전)
-    const update = () => {
-      raf = 0;
-      const active = mq.matches && !reduceMq.matches;
-      if (!active) { if (wasActive) { reset(); wasActive = false; } return; }
-      wasActive = true;
-      const rect = section.getBoundingClientRect();
-      const total = section.offsetHeight - window.innerHeight;
-      const scrolled = Math.min(Math.max(-rect.top, 0), total);
-      const p = total > 0 ? (scrolled / total) * (N - 1) : 0;
-      const focus = Math.round(p);
-      for (let i = 0; i < N; i++) {
-        const d = i - p;
-        const ad = Math.abs(d);
-        const card = cards[i];
-        card.style.transform = `translate3d(${-d * XVW}vw, ${d * YVH}vh, ${-ad * ZPX}px) rotateY(${d * ANGLE}deg)`;
-        card.style.opacity = String(Math.max(0.04, 1 - ad * 0.36));
-        card.style.zIndex = String(200 - Math.round(ad * 20));
-        card.style.pointerEvents = i === focus ? 'auto' : 'none';
-        card.classList.toggle('focus', i === focus);
-      }
-      dots.forEach((dt, i) => dt.classList.toggle('on', i === focus));
+    const enterFan = () => {
+      mode = 'fan';
+      if (io) { io.disconnect(); io = null; }
+      cards.forEach((c) => c.classList.remove('anim', 'in'));
+      applyFan();
     };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    // 모바일/태블릿: 세로 스택 + 스크롤 진입 3D 딜 애니메이션
+    const enterStack = () => {
+      mode = 'stack';
+      clearFanInline();
+      if (reduceMq.matches) { cards.forEach((c) => c.classList.remove('anim')); return; }
+      cards.forEach((c) => c.classList.add('anim'));
+      io = new IntersectionObserver(
+        (entries) => { for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io!.unobserve(e.target); } },
+        { threshold: 0.2 }
+      );
+      cards.forEach((c) => io!.observe(c));
+    };
 
+    const chooseMode = () => {
+      const wantFan = mq.matches && !reduceMq.matches;
+      if (wantFan && mode !== 'fan') enterFan();
+      else if (!wantFan && mode !== 'stack') enterStack();
+    };
+
+    const onScroll = () => { if (mode === 'fan' && !raf) raf = requestAnimationFrame(applyFan); };
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', update, { passive: true }); // 리사이즈는 즉시 반영
-    if (mq.addEventListener) mq.addEventListener('change', update);
-    if (reduceMq.addEventListener) reduceMq.addEventListener('change', update);
-    update(); // 초기 동기 적용
+    window.addEventListener('resize', () => { chooseMode(); if (mode === 'fan') applyFan(); }, { passive: true });
+    if (mq.addEventListener) mq.addEventListener('change', chooseMode);
+    if (reduceMq.addEventListener) reduceMq.addEventListener('change', chooseMode);
+    chooseMode();
+    if (mode === 'fan') applyFan();
   }
 </script>

@@ -274,8 +274,9 @@ const loop = [...cards, ...cards];
     .featured-media { max-width: 340px; margin-inline: auto; }
   }
   @media (max-width: 700px) {
-    .ticker-stage { transform: perspective(1400px) rotateY(-9deg); }
-    .ticker-track { animation-duration: 40s; }
+    .ticker-stage { transform: perspective(1100px) rotateY(-16deg); }
+    .ticker-track { animation-duration: 38s; }
+    .tk-card { width: clamp(210px, 60vw, 260px); }
   }
 
   /* 모션 최소화: 회전·자동스크롤 정지 → 평면 수동 스크롤 */
