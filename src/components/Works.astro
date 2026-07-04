@@ -88,17 +88,19 @@ const rows = await Promise.all(
   .featured {
     margin-top: clamp(36px, 5vw, 64px);
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
-    gap: clamp(24px, 3vw, 48px);
+    grid-template-columns: minmax(0, 420px) 1fr;
+    gap: clamp(28px, 4vw, 72px);
     align-items: center;
   }
+  .featured-media { max-width: 420px; }
   .featured-media video {
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 5; /* 인스타 릴스 세로 비율 — 잘림 없음 */
     object-fit: cover;
     border-radius: 16px;
     border: 1px solid var(--line);
     background: #000;
+    display: block;
   }
   .feat-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: var(--gold); }
   .featured-body h3 { margin-top: 16px; font-size: clamp(30px, 4.4vw, 60px); font-weight: 600; letter-spacing: -0.045em; line-height: 1.08; }
@@ -193,8 +195,8 @@ const rows = await Promise.all(
   }
 
   @media (max-width: 860px) {
-    .featured { grid-template-columns: 1fr; }
-    .featured-media video { aspect-ratio: 16 / 11; }
+    .featured { grid-template-columns: 1fr; gap: 28px; }
+    .featured-media { max-width: 360px; margin-inline: auto; }
   }
 </style>
 
