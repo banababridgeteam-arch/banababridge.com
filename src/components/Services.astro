@@ -1,108 +1,187 @@
 ---
-import SectionHead from './SectionHead.astro';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 interface Props { lang?: Lang }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 
-// 각 서비스의 대형 이니셜 마크 (언어 무관)
+// 각 서비스의 대형 이니셜 글리프 (언어 무관)
 const abbr = ['E', 'F', 'A', 'D', 'AX'];
+const N = t.services.items.length;
 ---
 
-<section class="section" id="services">
-  <div class="container">
-    <SectionHead num="03" text={t.services.head} />
+<section class="svc-3d" id="services" style={`--n:${N}`}>
+  <div class="svc-pin">
+    <div class="svc-pin-head">
+      <span class="svc-eyebrow">(03)&nbsp;&nbsp;SERVICES</span>
+      <h2 class="svc-heading display">{t.services.head}</h2>
+    </div>
 
-    <ol class="svc-list">
-      {t.services.items.map((s, i) => (
-        <li class="svc-row reveal">
-          <span class="svc-no">{s.no}</span>
-          <div class="svc-main">
-            <h3 class="svc-title display">{s.title}</h3>
-            <p class="svc-desc">{s.desc}</p>
-          </div>
-          <span class="svc-abbr display" aria-hidden="true">{abbr[i]}</span>
-          <span class="svc-arrow" aria-hidden="true">→</span>
-        </li>
-      ))}
-    </ol>
+    <div class="svc-stage">
+      <ul class="svc-fan" id="svc-fan">
+        {t.services.items.map((s, i) => (
+          <li class="svc-card" data-i={i}>
+            <span class="card-no">{s.no}</span>
+            <span class="card-glyph" aria-hidden="true">{abbr[i]}</span>
+            <div class="card-body">
+              <h3 class="card-title display">{s.title}</h3>
+              <p class="card-desc">{s.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="svc-dots" aria-hidden="true">
+      {t.services.items.map((_, i) => <span data-i={i}></span>)}
+    </div>
   </div>
 </section>
 
 <style>
-  .svc-list {
-    list-style: none;
-    margin-top: clamp(40px, 5vw, 72px);
-    border-top: 1px solid var(--line);
-  }
-  .svc-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 60px minmax(0, 1fr) auto 44px;
-    align-items: center;
-    gap: clamp(20px, 3vw, 48px);
-    padding: clamp(28px, 3.6vw, 52px) 0;
-    border-bottom: 1px solid var(--line);
-    transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
-  }
-  .svc-row::before {
-    content: '';
-    position: absolute;
-    left: -100vw; right: -100vw; top: 0; bottom: 0;
-    background: linear-gradient(180deg, rgba(201, 162, 94, 0.06), transparent);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-  .svc-row:hover::before { opacity: 1; }
-  .svc-row:hover { padding-left: 16px; }
-
-  .svc-no {
+  /* ── 모바일 우선(정적 스택) — JS/3D 실패해도 안전 ── */
+  .svc-3d { position: relative; padding: clamp(60px, 7vw, 100px) 0; }
+  .svc-pin { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+  .svc-pin-head { text-align: center; margin-bottom: clamp(28px, 4vw, 44px); }
+  .svc-eyebrow {
     font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--gold);
+    font-size: 12.5px; font-weight: 500; letter-spacing: 0.22em;
+    color: var(--violet); text-transform: uppercase;
+  }
+  .svc-heading {
+    margin-top: 12px;
+    font-size: clamp(32px, 5.4vw, 76px);
+    font-weight: 600; letter-spacing: -0.05em; line-height: 1.05;
+  }
+  .svc-fan { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .svc-card {
+    position: relative;
+    background: linear-gradient(165deg, #141a3a, #0a0e26);
+    border: 1px solid rgba(185, 169, 224, 0.22);
+    border-radius: 22px;
+    padding: clamp(24px, 3vw, 38px);
+    min-height: 200px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden;
+    box-shadow: 0 40px 90px -46px rgba(8, 6, 24, 0.9);
+  }
+  .card-no {
+    position: absolute; top: 24px; left: 26px;
+    font-family: var(--font-display); font-size: 14px; font-weight: 600;
+    letter-spacing: 0.12em; color: var(--violet);
     font-variant-numeric: tabular-nums;
-    align-self: start;
-    padding-top: 0.35em;
   }
-  .svc-title { font-size: clamp(24px, 3.2vw, 44px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
-  .svc-desc { margin-top: 12px; max-width: 48ch; color: var(--ink-dim); font-size: clamp(14.5px, 1.4vw, 16px); line-height: 1.6; }
+  .card-glyph {
+    position: absolute; top: -0.16em; right: 0.04em;
+    font-family: var(--font-display);
+    font-size: clamp(120px, 15vw, 240px); font-weight: 700; line-height: 1;
+    color: transparent; -webkit-text-stroke: 1.5px rgba(185, 169, 224, 0.28);
+    pointer-events: none; user-select: none;
+  }
+  .card-body { position: relative; z-index: 1; }
+  .card-title { font-size: clamp(22px, 2vw, 33px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  .card-desc { margin-top: 12px; color: var(--ink-dim); font-size: 14.5px; line-height: 1.6; max-width: 34ch; }
+  .svc-dots { display: none; }
 
-  /* 대형 이니셜 — 골드 아웃라인 워터마크 */
-  .svc-abbr {
-    justify-self: end;
-    font-size: clamp(48px, 6.5vw, 104px);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1.4px rgba(201, 162, 94, 0.55);
-    transition: -webkit-text-stroke-color 0.4s ease, color 0.4s ease;
-  }
-  .svc-row:hover .svc-abbr {
-    color: transparent;
-    -webkit-text-stroke-color: var(--gold);
-  }
-
-  .svc-arrow {
-    justify-self: end;
-    font-size: 22px;
-    color: var(--gold);
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .svc-row:hover .svc-arrow { opacity: 1; transform: none; }
-
-  @media (max-width: 860px) {
-    .svc-row {
-      grid-template-columns: 40px 1fr;
-      row-gap: 10px;
-      align-items: baseline;
+  /* ── 데스크톱: 스크롤 구동 3D 회전 카드 팬 ── */
+  @media (min-width: 880px) and (hover: hover) {
+    .svc-3d { height: calc(100vh + (var(--n) - 1) * 52vh); padding: 0; }
+    .svc-pin {
+      position: sticky; top: 0; height: 100vh; max-width: none; padding-inline: 0;
+      display: flex; flex-direction: column; overflow: hidden;
     }
-    .svc-desc { grid-column: 2; }
-    .svc-abbr { display: none; }
-    .svc-arrow { display: none; }
+    .svc-pin-head { padding-top: clamp(40px, 7vh, 84px); margin-bottom: 0; z-index: 2; }
+    .svc-stage { position: relative; flex: 1; perspective: 1700px; }
+    .svc-fan {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      transform-style: preserve-3d; gap: 0;
+    }
+    .svc-card {
+      grid-area: 1 / 1;
+      width: clamp(300px, 29vw, 420px);
+      height: clamp(360px, 52vh, 520px);
+      min-height: 0;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .svc-card.focus {
+      border-color: rgba(185, 169, 224, 0.5);
+      box-shadow: 0 50px 110px -44px rgba(107, 91, 208, 0.55);
+    }
+    .card-glyph { font-size: clamp(150px, 12vw, 230px); }
+    .svc-dots {
+      display: flex; justify-content: center; gap: 10px;
+      padding-bottom: clamp(28px, 5vh, 56px); z-index: 2;
+    }
+    .svc-dots span {
+      width: 8px; height: 8px; border-radius: 999px;
+      background: rgba(185, 169, 224, 0.28);
+      transition: background 0.4s ease, width 0.4s ease;
+    }
+    .svc-dots span.on { width: 26px; background: var(--lav); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-card { transition: none; }
   }
 </style>
+
+<script>
+  const section = document.getElementById('services');
+  const fan = document.getElementById('svc-fan');
+  if (section && fan) {
+    const cards = Array.from(fan.querySelectorAll<HTMLElement>('.svc-card'));
+    const dots = Array.from(section.querySelectorAll<HTMLElement>('.svc-dots span'));
+    const N = cards.length;
+    const mq = matchMedia('(min-width: 880px) and (hover: hover)');
+    const reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
+
+    // 튜닝 파라미터
+    const ANGLE = 30;   // deg / step
+    const XVW = 15;     // 가로 확산 (vw)
+    const YVH = 7;      // 세로 확산 (vh)
+    const ZPX = 130;    // 원근 후퇴 (px)
+
+    let raf = 0;
+    let wasActive = false;
+
+    const reset = () => {
+      for (const c of cards) {
+        c.style.transform = ''; c.style.opacity = ''; c.style.zIndex = '';
+        c.style.pointerEvents = ''; c.classList.remove('focus');
+      }
+      dots.forEach((d) => d.classList.remove('on'));
+    };
+
+    // 매 프레임 미디어쿼리를 확인 → 자기보정(뷰포트 0/브레이크포인트 전환에도 안전)
+    const update = () => {
+      raf = 0;
+      const active = mq.matches && !reduceMq.matches;
+      if (!active) { if (wasActive) { reset(); wasActive = false; } return; }
+      wasActive = true;
+      const rect = section.getBoundingClientRect();
+      const total = section.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const p = total > 0 ? (scrolled / total) * (N - 1) : 0;
+      const focus = Math.round(p);
+      for (let i = 0; i < N; i++) {
+        const d = i - p;
+        const ad = Math.abs(d);
+        const card = cards[i];
+        card.style.transform = `translate3d(${-d * XVW}vw, ${d * YVH}vh, ${-ad * ZPX}px) rotateY(${d * ANGLE}deg)`;
+        card.style.opacity = String(Math.max(0.04, 1 - ad * 0.36));
+        card.style.zIndex = String(200 - Math.round(ad * 20));
+        card.style.pointerEvents = i === focus ? 'auto' : 'none';
+        card.classList.toggle('focus', i === focus);
+      }
+      dots.forEach((dt, i) => dt.classList.toggle('on', i === focus));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update, { passive: true }); // 리사이즈는 즉시 반영
+    if (mq.addEventListener) mq.addEventListener('change', update);
+    if (reduceMq.addEventListener) reduceMq.addEventListener('change', update);
+    update(); // 초기 동기 적용
+  }
+</script>

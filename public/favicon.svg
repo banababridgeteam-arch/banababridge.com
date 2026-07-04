@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="10" y1="0" x2="54" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#c9a25e"/><stop offset="0.5" stop-color="#e9d2a0"/><stop offset="1" stop-color="#c9a25e"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="#0a0a0e"/>
-  <g transform="translate(6,14) scale(0.216)" fill="none">
-    <line x1="26" y1="96" x2="214" y2="96" stroke="#f4f2ee" stroke-width="6" stroke-linecap="round"/>
-    <line x1="80" y1="30" x2="80" y2="96" stroke="#f4f2ee" stroke-width="7" stroke-linecap="round"/>
-    <line x1="160" y1="30" x2="160" y2="96" stroke="#f4f2ee" stroke-width="7" stroke-linecap="round"/>
-    <path d="M26 92 C 50 74 66 46 80 30 C 96 46 108 55 120 61 C 132 55 144 46 160 30 C 174 46 190 74 214 92" stroke="url(#g)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="120" cy="61" r="8" fill="url(#g)"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0b1024"/><g transform="translate(9.5,9.5) scale(0.375)"><g fill="none" stroke="#b9a9e0" stroke-width="12" stroke-linecap="butt" stroke-linejoin="round"><line x1="26" y1="24" x2="26" y2="96"/><path d="M26 24 h9 a17.5 18 0 0 1 0 36 h-9"/><path d="M26 60 h9 a17.5 18 0 0 1 0 36 h-9"/><line x1="94" y1="24" x2="94" y2="96"/><path d="M94 24 h-9 a17.5 18 0 0 0 0 36 h9"/><path d="M94 60 h-9 a17.5 18 0 0 0 0 36 h9"/></g></g></svg>

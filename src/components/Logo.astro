@@ -1,30 +1,20 @@
 ---
-// 바나바브릿지 로고 — 현수교(suspension bridge) 마크 + 워드마크
+// 바나바브릿지 로고 — 마주보는 BB 모노그램(M1) + 워드마크
+// 마크=라벤더 / BANABA=아이보리 / BRIDGE=로즈 (나이트 가든 팔레트)
 interface Props { href?: string; class?: string }
 const { href = '/', class: cls = '' } = Astro.props;
 ---
 
 <a href={href} class={`logo ${cls}`} aria-label="BANABA BRIDGE">
-  <svg class="logo-mark" viewBox="0 0 240 128" fill="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="lgm" x1="20" y1="0" x2="220" y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#c9a25e" />
-        <stop offset="0.5" stop-color="#e9d2a0" />
-        <stop offset="1" stop-color="#c9a25e" />
-      </linearGradient>
-    </defs>
-    <line x1="26" y1="96" x2="214" y2="96" stroke="#f4f2ee" stroke-width="2.2" stroke-linecap="round" />
-    <line x1="80" y1="30" x2="80" y2="96" stroke="#f4f2ee" stroke-width="2.6" stroke-linecap="round" />
-    <line x1="160" y1="30" x2="160" y2="96" stroke="#f4f2ee" stroke-width="2.6" stroke-linecap="round" />
-    <g stroke="url(#lgm)" stroke-width="1" stroke-opacity="0.7">
-      <line x1="100" y1="52.5" x2="100" y2="96" />
-      <line x1="120" y1="61" x2="120" y2="96" />
-      <line x1="140" y1="52.5" x2="140" y2="96" />
-      <line x1="53" y1="63" x2="53" y2="96" />
-      <line x1="187" y1="63" x2="187" y2="96" />
+  <svg class="logo-mark" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+    <g stroke="currentColor" stroke-width="12" stroke-linecap="butt" stroke-linejoin="round">
+      <line x1="26" y1="24" x2="26" y2="96" />
+      <path d="M26 24 h9 a17.5 18 0 0 1 0 36 h-9" />
+      <path d="M26 60 h9 a17.5 18 0 0 1 0 36 h-9" />
+      <line x1="94" y1="24" x2="94" y2="96" />
+      <path d="M94 24 h-9 a17.5 18 0 0 0 0 36 h9" />
+      <path d="M94 60 h-9 a17.5 18 0 0 0 0 36 h9" />
     </g>
-    <path d="M26 92 C 50 74 66 46 80 30 C 96 46 108 55 120 61 C 132 55 144 46 160 30 C 174 46 190 74 214 92" stroke="url(#lgm)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-    <circle cx="120" cy="61" r="3.6" fill="url(#lgm)" />
   </svg>
   <span class="logo-word">BANABA<span>BRIDGE</span></span>
 </a>
@@ -32,17 +22,19 @@ const { href = '/', class: cls = '' } = Astro.props;
 <style>
   .logo { display: inline-flex; align-items: center; gap: 11px; }
   .logo-mark {
-    width: 46px; height: auto; flex-shrink: 0;
+    width: 42px; height: auto; flex-shrink: 0;
+    color: var(--lav);
     transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  :global(.site-header.scrolled) .logo-mark { width: 36px; }
+  :global(.site-header.scrolled) .logo-mark { width: 34px; }
   .logo-word {
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     line-height: 1;
+    color: var(--ink);
   }
-  .logo-word span { color: var(--gold); }
-  @media (max-width: 420px) { .logo-mark { width: 38px; } .logo-word { font-size: 14px; } }
+  .logo-word span { color: var(--rose); }
+  @media (max-width: 420px) { .logo-mark { width: 36px; } .logo-word { font-size: 14px; } }
 </style>
