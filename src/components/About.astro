@@ -9,39 +9,49 @@ const t = useTranslations(lang);
   <div class="container">
     <p class="index-label reveal"><span class="num">01</span><span class="txt">{t.about.label}</span></p>
 
-    <p class="about-statement reveal">
-      <b>{t.about.head}</b> {t.about.body}
-    </p>
+    <div class="about-grid">
+      <h2 class="about-head display reveal mask-head">
+        <span class="ml"><span>{t.about.head}</span></span>
+      </h2>
 
-    <p class="about-ax reveal">
-      <span class="ax-tag">AX</span>{t.about.ax}
-    </p>
+      <div class="about-side reveal">
+        <p class="about-body">{t.about.body}</p>
+        <p class="about-ax">
+          <span class="ax-tag">AX</span>{t.about.ax}
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  /* strove About: 라벨 + 32px 선언문 */
-  .about-statement {
-    margin-top: clamp(28px, 3.4vw, 48px);
-    max-width: 24ch;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(23px, 2.8vw, 34px);
-    line-height: 1.32;
-    letter-spacing: -0.03em;
-    color: var(--ink);
+  .about-grid {
+    margin-top: clamp(28px, 3.4vw, 52px);
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(32px, 5vw, 88px);
+    align-items: start;
   }
-  .about-statement b { font-weight: 600; }
+  .about-head {
+    font-size: clamp(30px, 4.6vw, 68px);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.05em;
+  }
+  .about-side { display: flex; flex-direction: column; gap: 24px; padding-top: 8px; }
+  .about-body {
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
   .about-ax {
-    max-width: 720px;
-    margin-top: clamp(32px, 4vw, 56px);
-    padding: 22px 24px;
+    padding: 20px 22px;
     border: 1px solid var(--line);
     border-radius: 14px;
     background: linear-gradient(180deg, var(--bg-2), var(--bg));
-    color: var(--ink-dim);
-    font-size: 15px;
-    line-height: 1.65;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
   }
   .ax-tag {
     display: inline-block;
@@ -56,5 +66,8 @@ const t = useTranslations(lang);
     letter-spacing: 0.06em;
     vertical-align: 2px;
   }
-  @media (max-width: 760px) { .about-statement { max-width: none; } }
+
+  @media (max-width: 860px) {
+    .about-grid { grid-template-columns: 1fr; gap: 28px; }
+  }
 </style>
