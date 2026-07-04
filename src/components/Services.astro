@@ -150,18 +150,14 @@ const abbr = ['E', 'F', 'A', 'D', 'AX'];
   const dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll<HTMLElement>('span')) : [];
   const N = cards.length;
 
-  const capable =
-    matchMedia('(min-width: 880px) and (hover: hover)').matches &&
-    !matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (scroll && stage && N > 1 && capable) {
-    scroll.classList.add('is3d');
-
-    let ticking = false;
+  if (scroll && stage && N > 1) {
     const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+    let ticking = false;
+    let active3d = false;
 
     function render() {
       ticking = false;
+      if (!active3d) return; // disable 후 큐잉된 rAF 방어
       const rect = scroll!.getBoundingClientRect();
       const total = rect.height - innerHeight; // 핀 구간 총 스크롤량
       const progress = clamp(-rect.top / (total || 1), 0, 1);
@@ -190,8 +186,36 @@ const abbr = ['E', 'F', 'A', 'D', 'AX'];
     const onScroll = () => {
       if (!ticking) { ticking = true; requestAnimationFrame(render); }
     };
-    addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', onScroll, { passive: true });
-    render();
+
+    // 폭·hover·모션 조건은 실시간 구독 (리사이즈·태블릿 회전 시 모드 전환)
+    const wide = matchMedia('(min-width: 880px) and (hover: hover)');
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    const capable = () => wide.matches && !motion.matches;
+
+    function enable() {
+      if (active3d) return;
+      active3d = true;
+      scroll!.classList.add('is3d');
+      addEventListener('scroll', onScroll, { passive: true });
+      addEventListener('resize', onScroll, { passive: true });
+      render();
+    }
+    function disable() {
+      if (!active3d) return;
+      active3d = false;
+      scroll!.classList.remove('is3d');
+      removeEventListener('scroll', onScroll);
+      removeEventListener('resize', onScroll);
+      // 폴백(세로 리스트) 복구 위해 인라인 3D 스타일 제거
+      cards.forEach((c) => { c.style.transform = ''; c.style.opacity = ''; c.style.zIndex = ''; });
+      dots.forEach((d) => d.classList.remove('on'));
+    }
+    const sync = () => (capable() ? enable() : disable());
+
+    // matchMedia change + 항상 켜진 resize 재검사(브라우저별 이벤트 편차 방어)
+    wide.addEventListener('change', sync);
+    motion.addEventListener('change', sync);
+    addEventListener('resize', sync, { passive: true });
+    sync();
   }
 </script>
