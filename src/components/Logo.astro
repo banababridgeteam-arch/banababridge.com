@@ -5,27 +5,33 @@ const { href = '/', class: cls = '' } = Astro.props;
 ---
 
 <a href={href} class={`logo ${cls}`} aria-label="BANABA BRIDGE">
-  <svg class="logo-mark" viewBox="0 0 50 30" fill="none" aria-hidden="true">
-    <path d="M3 25 Q25 3 47 25" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
-    <line x1="14" y1="14.4" x2="14" y2="25" stroke="url(#lg)" stroke-width="1.2" opacity="0.75" />
-    <line x1="25" y1="9" x2="25" y2="25" stroke="url(#lg)" stroke-width="1.2" opacity="0.75" />
-    <line x1="36" y1="14.4" x2="36" y2="25" stroke="url(#lg)" stroke-width="1.2" opacity="0.75" />
-    <circle cx="3" cy="25" r="3" fill="#e4ca94" />
-    <circle cx="47" cy="25" r="3" fill="#e4ca94" />
+  <svg class="logo-mark" viewBox="0 0 240 128" fill="none" aria-hidden="true">
     <defs>
-      <linearGradient id="lg" x1="0" y1="0" x2="50" y2="0" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#c9a25e" />
-        <stop offset="0.5" stop-color="#e4ca94" />
+      <linearGradient id="lgm" x1="20" y1="0" x2="220" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#c9a25e" />
+        <stop offset="0.5" stop-color="#e9d2a0" />
         <stop offset="1" stop-color="#c9a25e" />
       </linearGradient>
     </defs>
+    <line x1="26" y1="96" x2="214" y2="96" stroke="#f4f2ee" stroke-width="2.2" stroke-linecap="round" />
+    <line x1="80" y1="30" x2="80" y2="96" stroke="#f4f2ee" stroke-width="2.6" stroke-linecap="round" />
+    <line x1="160" y1="30" x2="160" y2="96" stroke="#f4f2ee" stroke-width="2.6" stroke-linecap="round" />
+    <g stroke="url(#lgm)" stroke-width="1" stroke-opacity="0.7">
+      <line x1="100" y1="52.5" x2="100" y2="96" />
+      <line x1="120" y1="61" x2="120" y2="96" />
+      <line x1="140" y1="52.5" x2="140" y2="96" />
+      <line x1="53" y1="63" x2="53" y2="96" />
+      <line x1="187" y1="63" x2="187" y2="96" />
+    </g>
+    <path d="M26 92 C 50 74 66 46 80 30 C 96 46 108 55 120 61 C 132 55 144 46 160 30 C 174 46 190 74 214 92" stroke="url(#lgm)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="120" cy="61" r="3.6" fill="url(#lgm)" />
   </svg>
   <span class="logo-word">BANABA<span>BRIDGE</span></span>
 </a>
 
 <style>
-  .logo { display: inline-flex; align-items: center; gap: 10px; }
-  .logo-mark { width: 30px; height: auto; flex-shrink: 0; }
+  .logo { display: inline-flex; align-items: center; gap: 11px; }
+  .logo-mark { width: 46px; height: auto; flex-shrink: 0; }
   .logo-word {
     font-family: var(--font-display);
     font-size: 16px;
@@ -34,5 +40,5 @@ const { href = '/', class: cls = '' } = Astro.props;
     line-height: 1;
   }
   .logo-word span { color: var(--gold); }
-  @media (max-width: 420px) { .logo-word { font-size: 14px; } }
+  @media (max-width: 420px) { .logo-mark { width: 38px; } .logo-word { font-size: 14px; } }
 </style>
