@@ -40,6 +40,7 @@ type Dict = {
   work: { label: string; head: string; featured: string; comingSoon: string; ongoing: string; upcoming: string; done: string };
   services: { label: string; head: string; items: SvcItem[] };
   stats: { items: StatItem[] };
+  faq: { label: string; head: string; items: { q: string; a: string }[] };
   contact: { label: string; head: string; body: string };
   footer: { tagline: string; menu: string; legal: string; privacy: string; rights: string };
 };
@@ -87,6 +88,15 @@ export const ui: Record<Lang, Dict> = {
         { value: '2023', label: '법인 설립' },
         { value: '4', label: '글로벌 진출국 (KR·CN·JP·VN)' },
         { value: '100', label: '계약 기반 진행 (%)' },
+      ],
+    },
+    faq: {
+      label: 'FAQ', head: '자주 묻는 질문.',
+      items: [
+        { q: '어떤 프로젝트를 진행하나요?', a: '해외 팬미팅·팬콘서트, K-아티스트 섭외와 브랜드 광고 에이전시, 그리고 브랜드 유통(벤더)을 진행합니다.' },
+        { q: '진행 절차는 어떻게 되나요?', a: '검증 → 계약 → 실행 → 기록의 4단계로 진행합니다. 주최·베뉴·조건을 먼저 확인하고, 반드시 계약서 기반으로 착수합니다.' },
+        { q: '브랜드 유통 제휴는 어떻게 하나요?', a: '제품을 검토한 뒤 적합한 국내외 판매 채널과 연결합니다. 이메일로 제품 소개서를 보내주시면 검토 후 회신드립니다.' },
+        { q: '문의하면 언제 회신되나요?', a: '이메일로 문의 주시면 영업일 기준 24시간 이내에 회신드립니다.' },
       ],
     },
     contact: {
@@ -140,6 +150,15 @@ export const ui: Record<Lang, Dict> = {
         { value: '100', label: 'Contract-based (%)' },
       ],
     },
+    faq: {
+      label: 'FAQ', head: 'Frequently asked.',
+      items: [
+        { q: 'What kind of projects do you run?', a: 'Overseas fan meetings and concerts, K-artist casting and brand advertising agency, and brand distribution (vendor).' },
+        { q: 'How does a project proceed?', a: 'In four steps — verify, contract, execute, record. We confirm the host, venue and terms first, and always start from a signed contract.' },
+        { q: 'How do brand distribution partnerships work?', a: 'We review your product and connect it to the right sales channels at home and abroad. Send us your product deck by email and we will reply after review.' },
+        { q: 'How soon will you reply?', a: 'Email us and we reply within one business day.' },
+      ],
+    },
     contact: {
       label: 'Contact', head: 'Need a connection?',
       body: 'Fan-meeting and concert agency, artist casting, brand distribution — we reply within one business day.',
@@ -191,6 +210,15 @@ export const ui: Record<Lang, Dict> = {
         { value: '100', label: '契约为本 (%)' },
       ],
     },
+    faq: {
+      label: 'FAQ', head: '常见问题。',
+      items: [
+        { q: '你们承接哪些项目？', a: '海外粉丝见面会与演唱会、韩流艺人邀约与品牌广告代理，以及品牌分销（供应商）。' },
+        { q: '项目如何推进？', a: '分为审核、签约、执行、记录四步。先确认主办方、场地与条件，并始终以签署的合同为起点。' },
+        { q: '品牌分销合作如何进行？', a: '我们会审核产品并对接合适的国内外销售渠道。请将产品资料发送至邮箱，审核后回复。' },
+        { q: '多久会回复？', a: '通过邮件联系，我们将在一个工作日内回复。' },
+      ],
+    },
     contact: {
       label: '联系', head: '需要一次连接吗？',
       body: '粉丝见面会与演唱会经纪、艺人邀约、品牌分销合作 —— 我们将在一个工作日内回复。',
@@ -240,6 +268,15 @@ export const ui: Record<Lang, Dict> = {
         { value: '2023', label: 'Thành lập' },
         { value: '4', label: 'Quốc gia (KR·CN·JP·VN)' },
         { value: '100', label: 'Dựa trên hợp đồng (%)' },
+      ],
+    },
+    faq: {
+      label: 'FAQ', head: 'Câu hỏi thường gặp.',
+      items: [
+        { q: 'Bạn thực hiện những dự án nào?', a: 'Fanmeeting và concert tại nước ngoài, tuyển chọn nghệ sĩ Hàn và đại lý quảng cáo thương hiệu, cùng phân phối thương hiệu (vendor).' },
+        { q: 'Dự án được tiến hành ra sao?', a: 'Theo bốn bước — thẩm định, hợp đồng, thực thi, ghi nhận. Chúng tôi xác minh nhà tổ chức, địa điểm và điều khoản trước, luôn bắt đầu từ hợp đồng đã ký.' },
+        { q: 'Hợp tác phân phối thương hiệu thế nào?', a: 'Chúng tôi xem xét sản phẩm và kết nối tới kênh bán phù hợp trong và ngoài nước. Hãy gửi hồ sơ sản phẩm qua email, chúng tôi sẽ phản hồi sau khi xem xét.' },
+        { q: 'Bao lâu sẽ được phản hồi?', a: 'Gửi email cho chúng tôi và bạn sẽ nhận phản hồi trong một ngày làm việc.' },
       ],
     },
     contact: {

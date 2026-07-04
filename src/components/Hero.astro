@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { SITE } from '../config';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
+import RollingText from './RollingText.astro';
 import heroImg from '../assets/brand/hero-connection.png';
 
 interface Props { lang?: Lang }
@@ -29,11 +30,11 @@ const t = useTranslations(lang);
 
       <div class="hero-cta reveal">
         {SITE.phone ? (
-          <a class="btn btn-gold" href={`tel:${SITE.phone}`}>{t.cta.call}</a>
+          <a class="btn btn-gold" href={`tel:${SITE.phone}`}><RollingText text={t.cta.call} /></a>
         ) : (
-          <a class="btn btn-gold" href={`mailto:${SITE.email}`}>{t.cta.inquire}</a>
+          <a class="btn btn-gold" href={`mailto:${SITE.email}`}><RollingText text={t.cta.inquire} /></a>
         )}
-        <a class="btn btn-ghost" href="#work">{t.nav.work}</a>
+        <a class="btn btn-ghost" href="#work"><RollingText text={t.nav.work} /></a>
       </div>
     </div>
 

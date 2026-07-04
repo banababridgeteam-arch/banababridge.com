@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../config';
 import SectionHead from './SectionHead.astro';
+import RollingText from './RollingText.astro';
 import { type Lang, defaultLang, useTranslations } from '../i18n/ui';
 
 interface Props { lang?: Lang }
@@ -15,10 +16,10 @@ const t = useTranslations(lang);
 
     <div class="contact-actions reveal">
       {SITE.phone && (
-        <a class="btn btn-gold" href={`tel:${SITE.phone}`}>{SITE.phoneDisplay} · {t.cta.call}</a>
+        <a class="btn btn-gold" href={`tel:${SITE.phone}`}><RollingText text={`${SITE.phoneDisplay} · ${t.cta.call}`} /></a>
       )}
       <a class={`btn ${SITE.phone ? 'btn-ghost' : 'btn-gold'}`} href={`mailto:${SITE.email}`}>
-        {SITE.email}
+        <RollingText text={SITE.email} />
       </a>
     </div>
   </div>

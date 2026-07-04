@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Home from '../components/Home.astro';
 import { SITE } from '../config';
-import { faqs } from '../data/faqs';
+import { ui } from '../i18n/ui';
 
 // 서비스 스키마 (전 언어 공통)
 const serviceJsonLd = {
@@ -13,11 +13,11 @@ const serviceJsonLd = {
   areaServed: ['KR', 'CN', 'JP', 'VN'],
   serviceType: ['팬미팅 에이전시', '팬콘서트 기획', '아티스트 섭외', '광고 에이전시', '브랜드 유통 벤더'],
 };
-// FAQPage (한국어 AEO — 답변엔진 대응). ko 홈에만 출력.
+// FAQPage (한국어 AEO — 화면 FAQ와 동일 소스). ko 홈에만 출력.
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
+  mainEntity: ui.ko.faq.items.map((f) => ({
     '@type': 'Question',
     name: f.q,
     acceptedAnswer: { '@type': 'Answer', text: f.a },

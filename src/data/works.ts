@@ -18,6 +18,7 @@ export interface Work {
   statusKey?: 'ongoing' | 'upcoming' | 'comingSoon';
   image?: string;      // src/assets/ig/ 파일명
   video?: string;      // public 경로
+  link?: string;       // 클릭 시 이동 (인스타 해당 게시물)
   featured?: boolean;
   brandLogo?: boolean;
 }
@@ -36,6 +37,7 @@ export const works: Work[] = [
     location: 'HONG KONG',
     image: '07_1_DWl43nnEVMK_poster.jpg',
     video: '/media/tiffany-hk-parkhyungsik.mp4',
+    link: 'https://www.instagram.com/p/DWl43nnEVMK/',
     featured: true,
   },
   {
@@ -51,6 +53,7 @@ export const works: Work[] = [
     location: 'SHANGHAI',
     statusKey: 'upcoming',
     image: '01_1_DaDEJb-yO6I.jpg',
+    link: 'https://www.instagram.com/p/DaDEJb-yO6I/',
   },
   {
     index: '03',
@@ -64,6 +67,7 @@ export const works: Work[] = [
     year: '2026.05',
     location: 'HO CHI MINH',
     image: '04_1_DW3nKCqEd3l.jpg',
+    link: 'https://www.instagram.com/p/DW3nKCqEd3l/',
   },
   {
     index: '04',
@@ -77,6 +81,7 @@ export const works: Work[] = [
     year: '2026',
     location: 'SEOUL',
     image: '06_1_DW1a1ilkZXT.jpg',
+    link: 'https://www.instagram.com/p/DW1a1ilkZXT/',
   },
   {
     index: '05',

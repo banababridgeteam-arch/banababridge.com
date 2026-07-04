@@ -218,6 +218,33 @@ a { color: inherit; text-decoration: none; }
 
 .count { font-variant-numeric: tabular-nums; }
 
+/* 롤링 텍스트 (버튼 hover 시 글자 굴러감) */
+.rt { display: inline-flex; overflow: hidden; line-height: 1.2em; vertical-align: bottom; }
+.rt > span {
+  display: block;
+  text-shadow: 0 1.2em 0 currentColor;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
+}
+.btn:hover .rt > span,
+.roll:hover .rt > span { transform: translateY(-1.2em); }
+
+/* 오도미터 (숫자 슬롯머신) */
+.odo { display: inline-flex; align-items: center; }
+.odo-col { height: 1em; overflow: hidden; display: inline-block; }
+.odo-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.odo-strip span { height: 1em; line-height: 1em; text-align: center; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rt > span { transition: none; }
+  .odo-strip { transition: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mask-head .ml > span { transform: none; transition: none; }
   .marquee-track { animation: none; }

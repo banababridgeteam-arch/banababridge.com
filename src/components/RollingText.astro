@@ -1,0 +1,15 @@
+---
+// strove식 롤링 텍스트 — 버튼 hover 시 글자가 위로 굴러가며 같은 글자로 교체
+// (text-shadow로 아래에 복제본을 두고 translateY로 올림)
+interface Props { text: string }
+const { text } = Astro.props;
+const chars = [...text];
+---
+
+<span class="rt" aria-label={text}>
+  {chars.map((c, i) => (
+    <span aria-hidden="true" style={`transition-delay:${(i * 0.016).toFixed(3)}s`}>
+      {c === ' ' ? ' ' : c}
+    </span>
+  ))}
+</span>

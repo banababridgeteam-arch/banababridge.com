@@ -9,6 +9,7 @@ import {
   useTranslations,
 } from '../i18n/ui';
 import Logo from './Logo.astro';
+import RollingText from './RollingText.astro';
 
 interface Props {
   lang?: Lang;
@@ -52,9 +53,9 @@ const nav = [
       )}
 
       {SITE.phone ? (
-        <a class="btn btn-gold header-cta" href={`tel:${SITE.phone}`}>{t.cta.call}</a>
+        <a class="btn btn-gold header-cta" href={`tel:${SITE.phone}`}><RollingText text={t.cta.call} /></a>
       ) : (
-        <a class="btn btn-gold header-cta" href={`mailto:${SITE.email}`}>{t.cta.email}</a>
+        <a class="btn btn-gold header-cta" href={`mailto:${SITE.email}`}><RollingText text={t.cta.email} /></a>
       )}
 
       <button
