@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { works } from '../data/works';
 import sundriesLogo from '../assets/brand/sundries-logo.png';
@@ -17,26 +17,35 @@ const findImage = (name?: string) =>
 const statusText = (k?: string) =>
   k === 'ongoing' ? t.work.ongoing : k === 'upcoming' ? t.work.upcoming : k === 'comingSoon' ? t.work.comingSoon : null;
 
-const resolve = async (meta: ImageMetadata | null) =>
-  meta ? (await getImage({ src: meta, width: 560 })).src : null;
+const catLabel: Record<string, string> = { ENTERTAINMENT: 'Entertainment', VENDOR: 'Vendor', BRAND: 'Brand' };
 
 const featured = works.find((w) => w.featured);
 const featuredImg = findImage(featured?.image);
-const rest = works.filter((w) => !w.featured);
 
-// 호버 리빌·모바일 썸네일용 이미지 URL 미리 해결
-const rows = await Promise.all(
-  rest.map(async (w) => ({
-    w,
-    st: statusText(w.statusKey),
-    imgSrc: w.image ? await resolve(findImage(w.image)) : w.brandLogo ? await resolve(sundriesLogo) : null,
-  }))
+// 티커 카드 — 전 프로젝트 이미지 미리 최적화·해결
+const cards = await Promise.all(
+  works.map(async (w) => {
+    const meta = w.image ? findImage(w.image) : w.brandLogo ? sundriesLogo : null;
+    const src = meta ? (await getImage({ src: meta, width: 640 })).src : null;
+    return {
+      w,
+      src,
+      isLogo: !!w.brandLogo && !w.image,
+      st: statusText(w.statusKey),
+      cat: catLabel[w.category] ?? w.category,
+    };
+  })
 );
+// 무한 루프용 2벌 (translateX -50%)
+const loop = [...cards, ...cards];
 ---
 
-<section class="section" id="work">
-  <div class="container">
+<section class="section works" id="work">
+  <div class="works-bg" aria-hidden="true"></div>
+
+  <div class="container works-head">
     <SectionHead num="02" text={t.work.head} />
+    <p class="works-intro reveal">{t.work.intro}</p>
 
     {featured && (
       <article class="featured reveal">
@@ -46,7 +55,7 @@ const rows = await Promise.all(
           </video>
         </div>
         <div class="featured-body">
-          <p class="feat-tag">{t.work.featured} · {featured.category}</p>
+          <p class="feat-tag">{t.work.featured} · {catLabel[featured.category]}</p>
           <h3 class="display">{featured.title[lang]}</h3>
           <div class="feat-meta">
             <span>{featured.year}</span>
@@ -58,44 +67,93 @@ const rows = await Promise.all(
         </div>
       </article>
     )}
-
-    {/* strove식 프로젝트 인덱스 — 호버 시 커서 옆에 이미지 리빌 */}
-    <div class="work-index" id="work-index">
-      {rows.map(({ w, st, imgSrc }) => {
-        const Tag = w.link ? 'a' : 'div';
-        const linkAttrs = w.link ? { href: w.link, target: '_blank', rel: 'noopener' } : {};
-        return (
-          <Tag class="work-row reveal" data-img={imgSrc} {...linkAttrs}>
-            <span class="wr-no">{w.index}</span>
-            {imgSrc && <img class="wr-thumb" src={imgSrc} alt="" width="120" height="150" loading="lazy" decoding="async" />}
-            <span class="wr-title">{w.title[lang]}</span>
-            <span class="wr-meta">
-              {w.year}{w.location ? ` · ${w.location}` : ''}{st ? ` · ${st}` : ''}
-            </span>
-            <span class="wr-go" aria-hidden="true">{w.link ? '↗' : ''}</span>
-          </Tag>
-        );
-      })}
-    </div>
   </div>
 
-  {/* 커서 추적 리빌 이미지 (데스크톱) */}
-  <div class="work-peek" id="work-peek" aria-hidden="true"><img alt="" decoding="async" /></div>
+  {/* 3D 회전 티커 (strove식 원근 회전 갤러리) — 히어로 꽃 영상 색감을 입힌 나이트 가든 밴드 */}
+  <div class="ticker" id="ticker" aria-label={t.work.label}>
+    <div class="ticker-stage">
+      <ul class="ticker-track">
+        {loop.map(({ w, src, isLogo, st, cat }, i) => {
+          const dup = i >= cards.length;
+          const Tag = w.link ? 'a' : 'div';
+          const attrs = w.link ? { href: w.link, target: '_blank', rel: 'noopener' } : {};
+          return (
+            <li class="tk-item" aria-hidden={dup ? 'true' : undefined}>
+              <Tag class="tk-card" {...attrs}>
+                <div class={`tk-media${isLogo ? ' is-logo' : ''}`}>
+                  {src && (
+                    <img
+                      src={src}
+                      alt={dup ? '' : w.title[lang]}
+                      class={isLogo ? 'tk-logo' : 'tk-photo'}
+                      width="320" height="400"
+                      loading="lazy" decoding="async"
+                      draggable="false"
+                    />
+                  )}
+                  <span class="tk-pill">{cat}</span>
+                </div>
+                <div class="tk-info">
+                  <span class="tk-title">{w.title[lang]}</span>
+                  <span class="tk-sub">
+                    {w.year}{w.location ? ` · ${w.location}` : ''}{st ? ` · ${st}` : ''}
+                  </span>
+                </div>
+                {w.link && <span class="tk-go" aria-hidden="true">↗</span>}
+              </Tag>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
 </section>
 
 <style>
-  /* 피처드 (티파니 홍콩 영상) */
+  /* 꽃 영상 추출 팔레트 — 딥 인디고 · 로열블루 · 바이올렛 · 라벤더 · 로즈 */
+  .works {
+    --fl-indigo: #232a5c;
+    --fl-blue: #3a3f8f;
+    --fl-violet: #6b5bd0;
+    --fl-lav: #b9a9e0;
+    --fl-rose: #d69bc4;
+    position: relative;
+    overflow: hidden;
+  }
+  .works > * { position: relative; z-index: 1; }
+  /* 전체 폭으로 쫙 펼친 나이트 가든 무드 밴드 */
+  .works-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(66% 52% at 82% 32%, rgba(107, 91, 208, 0.22), transparent 60%),
+      radial-gradient(58% 58% at 15% 66%, rgba(58, 63, 143, 0.17), transparent 62%),
+      radial-gradient(48% 40% at 62% 92%, rgba(214, 155, 196, 0.12), transparent 62%),
+      linear-gradient(180deg, #000 0%, #06081c 24%, #090c26 54%, #05060f 82%, #000 100%);
+  }
+
+  .works-intro {
+    max-width: 620px;
+    margin-top: clamp(-8px, -0.5vw, 0px);
+    color: var(--ink-dim);
+    font-size: clamp(15.5px, 1.5vw, 18px);
+    line-height: 1.65;
+  }
+
+  /* ── 피처드 (티파니 홍콩 영상) ── */
   .featured {
-    margin-top: clamp(36px, 5vw, 64px);
+    margin-top: clamp(36px, 5vw, 60px);
     display: grid;
-    grid-template-columns: minmax(0, 420px) 1fr;
-    gap: clamp(28px, 4vw, 72px);
+    grid-template-columns: minmax(0, 400px) 1fr;
+    gap: clamp(28px, 4vw, 64px);
     align-items: center;
   }
-  .featured-media { max-width: 420px; }
+  .featured-media { max-width: 400px; }
   .featured-media video {
     width: 100%;
-    aspect-ratio: 4 / 5; /* 인스타 릴스 세로 비율 — 잘림 없음 */
+    aspect-ratio: 4 / 5;
     object-fit: cover;
     border-radius: 16px;
     border: 1px solid var(--line);
@@ -103,7 +161,7 @@ const rows = await Promise.all(
     display: block;
   }
   .feat-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: var(--gold); }
-  .featured-body h3 { margin-top: 16px; font-size: clamp(30px, 4.4vw, 60px); font-weight: 600; letter-spacing: -0.045em; line-height: 1.08; }
+  .featured-body h3 { margin-top: 16px; font-size: clamp(30px, 4.4vw, 58px); font-weight: 600; letter-spacing: -0.045em; line-height: 1.08; }
   .feat-meta { margin-top: 22px; display: flex; gap: 18px; font-size: 13.5px; color: var(--muted); letter-spacing: 0.05em; }
   .feat-meta .loc { color: var(--gold-soft); }
   .feat-ig {
@@ -119,123 +177,117 @@ const rows = await Promise.all(
   }
   .feat-ig:hover { border-color: var(--gold); color: var(--gold-soft); }
 
-  /* 프로젝트 인덱스 */
-  .work-index {
-    margin-top: clamp(44px, 6vw, 88px);
-    border-top: 1px solid var(--line);
-  }
-  .work-row {
+  /* ── 3D 회전 티커 ── */
+  .ticker {
+    margin-top: clamp(48px, 7vw, 96px);
     position: relative;
-    display: grid;
-    grid-template-columns: 54px minmax(0, 1fr) minmax(0, 240px) 34px;
-    align-items: center;
-    gap: 20px;
-    padding: clamp(22px, 2.8vw, 38px) 0;
-    border-bottom: 1px solid var(--line);
-    color: inherit;
-    transition: padding-left 0.4s cubic-bezier(0.22,1,0.36,1), color 0.3s ease;
-  }
-  a.work-row:hover { padding-left: 16px; }
-  .wr-no { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--gold); }
-  .wr-title {
-    font-family: var(--font-display);
-    font-size: clamp(21px, 2.9vw, 40px);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-    transition: color 0.3s ease;
-  }
-  a.work-row:hover .wr-title { color: var(--gold-soft); }
-  .wr-meta { font-size: 13px; color: var(--muted); letter-spacing: 0.03em; white-space: normal; text-align: right; }
-  .wr-go { justify-self: end; font-size: 18px; color: var(--gold); opacity: 0.5; transition: opacity 0.3s ease, transform 0.3s ease; }
-  a.work-row:hover .wr-go { opacity: 1; transform: translate(3px, -3px); }
-  .wr-thumb { display: none; }
-
-  /* 커서 추적 리빌 이미지 */
-  .work-peek {
-    position: fixed;
-    top: 0; left: 0;
-    width: clamp(220px, 22vw, 360px);
-    aspect-ratio: 4 / 5;
-    border-radius: 14px;
+    width: 100%;
     overflow: hidden;
-    border: 1px solid var(--line-strong);
-    box-shadow: 0 40px 90px -40px rgba(0,0,0,0.9);
-    pointer-events: none;
-    z-index: 60;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.92) rotate(-3deg);
-    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    padding: clamp(26px, 4vw, 60px) 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .ticker-stage {
+    transform: perspective(1600px) rotateY(-15deg) rotateX(1.5deg);
+    transform-style: preserve-3d;
+    width: max-content;
+  }
+  .ticker-track {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(18px, 2vw, 30px);
+    width: max-content;
+    padding-inline: clamp(18px, 2.6vw, 40px);
+    animation: tk-scroll 52s linear infinite;
     will-change: transform;
   }
-  .work-peek.show { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-  .work-peek img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  @keyframes tk-scroll { to { transform: translateX(-50%); } }
 
-  /* 모바일·터치: 리빌 대신 인라인 썸네일 */
-  @media (hover: none), (max-width: 860px) {
-    .work-peek { display: none; }
-    .work-row {
-      grid-template-columns: 64px 1fr 22px;
-      grid-template-areas: 'thumb title go' 'thumb meta go';
-      row-gap: 6px;
-      column-gap: 16px;
-    }
-    .wr-no { display: none; }
-    .wr-thumb {
-      display: block;
-      grid-area: thumb;
-      width: 64px; height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-    }
-    .wr-title { grid-area: title; font-size: 18px; }
-    .wr-meta { grid-area: meta; white-space: normal; }
-    .wr-go { grid-area: go; align-self: center; }
+  .tk-item { list-style: none; flex: 0 0 auto; }
+  .tk-card { display: block; width: clamp(236px, 23vw, 320px); color: inherit; }
+
+  .tk-media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(185, 169, 224, 0.20);
+    background: linear-gradient(160deg, var(--fl-indigo), #0a0c22);
+    box-shadow: 0 30px 60px -34px rgba(41, 30, 82, 0.9);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.4s ease, box-shadow 0.5s ease;
   }
+  .tk-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tk-media.is-logo { display: grid; place-items: center; }
+  .tk-logo { width: 62%; height: auto; opacity: 0.92; filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5)); }
+
+  a.tk-card:hover .tk-media {
+    transform: translateY(-6px);
+    border-color: var(--fl-lav);
+    box-shadow: 0 40px 80px -34px rgba(107, 91, 208, 0.7);
+  }
+
+  .tk-pill {
+    position: absolute;
+    top: 13px; left: 13px;
+    padding: 6px 13px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #1a1124;
+    background: linear-gradient(120deg, var(--fl-lav), var(--fl-rose));
+    box-shadow: 0 6px 18px -6px rgba(214, 155, 196, 0.6);
+  }
+
+  .tk-info { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; }
+  .tk-title {
+    font-family: var(--font-display);
+    font-size: clamp(17px, 1.5vw, 21px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.3s ease;
+  }
+  a.tk-card:hover .tk-title { color: var(--fl-lav); }
+  .tk-sub { font-size: 12.5px; color: var(--muted); letter-spacing: 0.03em; }
+  .tk-go {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--fl-lav);
+    opacity: 0.55;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  a.tk-card:hover .tk-go { opacity: 1; transform: translate(3px, -3px); }
 
   @media (max-width: 860px) {
     .featured { grid-template-columns: 1fr; gap: 28px; }
-    .featured-media { max-width: 360px; margin-inline: auto; }
+    .featured-media { max-width: 340px; margin-inline: auto; }
+  }
+  @media (max-width: 700px) {
+    .ticker-stage { transform: perspective(1400px) rotateY(-9deg); }
+    .ticker-track { animation-duration: 40s; }
+  }
+
+  /* 모션 최소화: 회전·자동스크롤 정지 → 평면 수동 스크롤 */
+  @media (prefers-reduced-motion: reduce) {
+    .ticker {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+      scroll-snap-type: x mandatory;
+    }
+    .ticker-stage { transform: none; }
+    .ticker-track { animation: none; width: max-content; }
+    .tk-item { scroll-snap-align: start; }
+    /* 중복 2벌 중 뒷벌은 숨김 (수동 스크롤 시 불필요) */
+    .tk-item[aria-hidden='true'] { display: none; }
   }
 </style>
-
-<script>
-  // 커서 추적 hover-reveal (데스크톱 · hover 가능 기기)
-  const peek = document.getElementById('work-peek');
-  const peekImg = peek?.querySelector('img') as HTMLImageElement | null;
-  const rows = Array.from(document.querySelectorAll<HTMLElement>('#work-index .work-row[data-img]'));
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  if (peek && peekImg && rows.length && fine) {
-    let tx = innerWidth / 2, ty = innerHeight / 2, x = tx, y = ty, raf = 0, active = false;
-
-    const loop = () => {
-      x += (tx - x) * 0.16;
-      y += (ty - y) * 0.16;
-      peek.style.transform =
-        `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${active ? 1 : 0.92}) rotate(${active ? 0 : -3}deg)`;
-      if (active || Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) {
-        raf = requestAnimationFrame(loop);
-      } else { raf = 0; }
-    };
-    const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
-
-    addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; if (active) kick(); }, { passive: true });
-
-    rows.forEach((row) => {
-      const src = row.dataset.img!;
-      row.addEventListener('mouseenter', () => {
-        if (peekImg.getAttribute('src') !== src) peekImg.src = src;
-        active = true;
-        peek.classList.add('show');
-        kick();
-      });
-      row.addEventListener('mouseleave', () => {
-        active = false;
-        peek.classList.remove('show');
-        kick();
-      });
-    });
-  }
-</script>

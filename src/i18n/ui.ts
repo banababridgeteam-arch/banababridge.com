@@ -37,7 +37,7 @@ type Dict = {
   cta: { call: string; email: string; inquire: string };
   hero: { badge: string; line1: string; line2: string; sub: string; recent: string; rotate: string[]; scroll: string };
   about: { label: string; head: string; body: string; ax: string };
-  work: { label: string; head: string; featured: string; comingSoon: string; ongoing: string; upcoming: string; done: string };
+  work: { label: string; head: string; intro: string; featured: string; comingSoon: string; ongoing: string; upcoming: string; done: string };
   services: { label: string; head: string; items: SvcItem[] };
   stats: { items: StatItem[] };
   faq: { label: string; head: string; items: { q: string; a: string }[] };
@@ -71,6 +71,7 @@ export const ui: Record<Lang, Dict> = {
     },
     work: {
       label: '프로젝트', head: '기록으로 증명합니다.',
+      intro: '무대와 시장을 잇는 다리 위에서 완성한 프로젝트들. 각 사례는 전략으로 세우고, 감각으로 다듬고, 결과로 증명했습니다.',
       featured: 'Featured', comingSoon: 'Coming Soon', ongoing: '진행 중', upcoming: '개최 예정', done: '완료',
     },
     services: {
@@ -131,6 +132,7 @@ export const ui: Record<Lang, Dict> = {
     },
     work: {
       label: 'Work', head: 'Proven by the record.',
+      intro: 'Projects built on the bridge between stage and market — each one raised with strategy, refined by taste, and proven by results.',
       featured: 'Featured', comingSoon: 'Coming Soon', ongoing: 'Ongoing', upcoming: 'Upcoming', done: 'Completed',
     },
     services: {
@@ -191,6 +193,7 @@ export const ui: Record<Lang, Dict> = {
     },
     work: {
       label: '项目', head: '以实绩证明。',
+      intro: '在连接舞台与市场的桥上完成的项目。每一个都以策略立项、以品味打磨、以结果证明。',
       featured: '精选', comingSoon: '敬请期待', ongoing: '进行中', upcoming: '即将举办', done: '已完成',
     },
     services: {
@@ -251,6 +254,7 @@ export const ui: Record<Lang, Dict> = {
     },
     work: {
       label: 'Dự án', head: 'Chứng minh bằng thành tích.',
+      intro: 'Những dự án hoàn thành trên cây cầu nối sân khấu và thị trường — mỗi dự án được dựng bằng chiến lược, tinh chỉnh bằng gu thẩm mỹ và chứng minh bằng kết quả.',
       featured: 'Featured', comingSoon: 'Coming Soon', ongoing: 'Đang tiến hành', upcoming: 'Sắp diễn ra', done: 'Hoàn thành',
     },
     services: {
