@@ -5,3 +5,6 @@ dist/
 *.log
 .env
 .env.*
+
+# 대용량 원본 에셋 (최적화본은 public/media/에 있음)
+docs/flower-arc/

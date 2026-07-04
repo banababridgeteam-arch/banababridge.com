@@ -31,7 +31,11 @@ const { href = '/', class: cls = '' } = Astro.props;
 
 <style>
   .logo { display: inline-flex; align-items: center; gap: 11px; }
-  .logo-mark { width: 46px; height: auto; flex-shrink: 0; }
+  .logo-mark {
+    width: 46px; height: auto; flex-shrink: 0;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :global(.site-header.scrolled) .logo-mark { width: 36px; }
   .logo-word {
     font-family: var(--font-display);
     font-size: 16px;
