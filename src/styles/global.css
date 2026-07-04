@@ -238,24 +238,6 @@ a { color: inherit; text-decoration: none; }
 .marquee-item .dot { color: var(--gold); font-size: 0.5em; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
-/* 커스텀 커서 (mix-blend 원형, 데스크톱 전용) */
-.cursor {
-  position: fixed;
-  top: 0; left: 0;
-  width: 34px; height: 34px;
-  border: 1px solid var(--gold-soft);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  opacity: 0;
-  transition: width 0.28s ease, height 0.28s ease, background 0.28s ease,
-    border-color 0.28s ease, opacity 0.3s ease;
-}
-.cursor.on { opacity: 1; }
-.cursor.hover { width: 62px; height: 62px; background: #fff; border-color: #fff; }
-
 .count { font-variant-numeric: tabular-nums; }
 
 /* 롤링 텍스트 (버튼 hover 시 글자 굴러감) */
@@ -288,9 +270,4 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .mask-head .ml > span { transform: none; transition: none; }
   .marquee-track { animation: none; }
-}
-@media (hover: hover) and (pointer: fine) {
-  body.has-cursor,
-  body.has-cursor a,
-  body.has-cursor button { cursor: none; }
 }

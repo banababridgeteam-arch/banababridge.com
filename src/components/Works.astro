@@ -25,12 +25,14 @@ const featuredImg = findImage(featured?.image);
 // 티커 카드 — 전 프로젝트 이미지 미리 최적화·해결
 const cards = await Promise.all(
   works.map(async (w) => {
-    const meta = w.image ? findImage(w.image) : w.brandLogo ? sundriesLogo : null;
+    const imgMeta = w.image ? findImage(w.image) : null;
+    const meta = imgMeta ?? (w.brandLogo ? sundriesLogo : null);
     const src = meta ? (await getImage({ src: meta, width: 640 })).src : null;
+    const usedLogo = !imgMeta && !!w.brandLogo; // 실제 이미지 없을 때만 로고
     return {
       w,
       src,
-      isLogo: !!w.brandLogo && !w.image,
+      isLogo: usedLogo,
       st: statusText(w.statusKey),
       cat: catLabel[w.category] ?? w.category,
     };

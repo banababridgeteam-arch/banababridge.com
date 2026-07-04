@@ -94,6 +94,8 @@ export const works: Work[] = [
     },
     year: '2026',
     statusKey: 'comingSoon',
+    // 아이웨어 에디토리얼 이미지 (src/assets/ig/sundries-eyewear.jpg 저장 시 자동 사용, 없으면 로고 폴백)
+    image: 'sundries-eyewear.jpg',
     brandLogo: true,
   },
 ];
