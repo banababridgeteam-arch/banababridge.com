@@ -134,19 +134,19 @@ const t = useTranslations(lang);
     margin-top: clamp(48px, 8vw, 100px);
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(40px, 12.6vw, 250px);
+    font-size: clamp(40px, 11.4vw, 232px);
     line-height: 0.86;
     letter-spacing: -0.055em;
     white-space: nowrap;
     color: var(--ink);
     opacity: 0.97;
   }
-  .hero-wordmark span { color: var(--gold); font-size: 0.28em; vertical-align: top; }
+  .hero-wordmark span { color: var(--gold); font-size: 0.24em; vertical-align: 0.42em; margin-left: 0.04em; }
 
   .scroll-tag {
     position: absolute;
     bottom: 26px;
-    right: var(--gutter);
+    right: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
     font-size: 11px;
     letter-spacing: 0.3em;
     text-transform: uppercase;

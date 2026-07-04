@@ -27,14 +27,14 @@ const t = useTranslations(lang);
 </section>
 
 <style>
-  .faq-list { margin-top: clamp(40px, 5vw, 72px); max-width: 900px; }
+  .faq-list { margin-top: clamp(40px, 5vw, 72px); max-width: 760px; }
   .faq-item { border-bottom: 1px solid var(--line); }
   .faq-item summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    padding: clamp(20px, 2.4vw, 30px) 4px;
+    padding: clamp(20px, 2.4vw, 30px) 0;
     cursor: pointer;
     list-style: none;
     font-family: var(--font-display);
@@ -48,10 +48,10 @@ const t = useTranslations(lang);
   .faq-item summary svg { flex-shrink: 0; color: var(--gold); transition: transform 0.3s ease; }
   .faq-item[open] summary svg { transform: rotate(180deg); }
   .faq-item p {
-    padding: 0 4px clamp(22px, 2.4vw, 30px);
-    max-width: 720px;
+    padding: 0 0 clamp(22px, 2.4vw, 30px);
+    max-width: none;
     color: var(--ink-dim);
-    font-size: clamp(15px, 1.5vw, 17px);
-    line-height: 1.65;
+    font-size: clamp(15.5px, 1.5vw, 17px);
+    line-height: 1.7;
   }
 </style>

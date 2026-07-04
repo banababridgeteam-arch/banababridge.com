@@ -64,10 +64,11 @@ const abbr = ['E', 'F', 'A', 'D', 'AX'];
     min-height: 240px;
     padding: clamp(26px, 3.4vw, 46px);
     border: 1px solid var(--line);
-    border-radius: 22px;
+    border-radius: 14px;
     background:
       radial-gradient(120% 120% at 85% 0%, rgba(201,162,94,0.10), transparent 55%),
       linear-gradient(180deg, var(--bg-2), var(--bg-3));
+    box-shadow: 0 24px 60px -40px rgba(0, 0, 0, 0.6);
     overflow: hidden;
   }
   .svc-card-top { display: flex; justify-content: space-between; align-items: center; }
@@ -87,7 +88,7 @@ const abbr = ['E', 'F', 'A', 'D', 'AX'];
   }
   .svc-card-body { }
   .svc-title { font-family: var(--font-display); font-size: clamp(24px, 3vw, 40px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; }
-  .svc-desc { margin-top: 12px; max-width: 46ch; color: var(--muted); font-size: 15px; line-height: 1.55; }
+  .svc-desc { margin-top: 12px; max-width: 46ch; color: var(--ink-dim); font-size: 15px; line-height: 1.6; }
 
   .svc-dots { display: none; }
 

@@ -164,7 +164,7 @@ a { color: inherit; text-decoration: none; }
 
 /* 텍스트가 아래에서 슬라이드하며 나타남 */
 .mask-head { opacity: 1 !important; transform: none !important; }
-.mask-head .ml { display: block; overflow: hidden; padding-bottom: 0.04em; }
+.mask-head .ml { display: block; overflow: hidden; padding: 0.06em 0.03em 0.12em; margin: -0.06em -0.03em -0.12em; }
 .mask-head .ml > span {
   display: block;
   transform: translateY(112%);

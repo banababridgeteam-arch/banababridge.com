@@ -97,14 +97,6 @@ const nav = [
     justify-content: space-between;
     gap: 20px;
   }
-  .logo {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-  .logo span { color: var(--gold); }
-
   .nav { display: flex; gap: 30px; }
   .nav a {
     font-size: 14px;
@@ -172,8 +164,13 @@ const nav = [
       border-bottom: 1px solid var(--line);
     }
     .site-header.menu-open .nav { display: flex; }
-    .nav a { padding: 15px 2px; font-size: 17px; border-bottom: 1px solid var(--line); }
+    .nav a { padding: 15px 0; font-size: 17px; border-bottom: 1px solid var(--line); }
     .nav a:last-child { border-bottom: none; }
+  }
+  @media (max-width: 600px) {
+    .header-inner { gap: 12px; }
+    .lang-switch { gap: 0; }
+    .lang-switch a { padding: 5px 6px; }
   }
 </style>
 

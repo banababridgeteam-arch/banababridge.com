@@ -80,7 +80,9 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 15px;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
   }
+  .footer-back:hover { transform: translateY(-2px); background: #0d0a06; }
   .footer-back .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-soft); }
   .footer-tag {
     max-width: 20ch;
@@ -95,8 +97,9 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
 
   .footer-links {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(3, minmax(0, 220px));
+    justify-content: start;
+    gap: clamp(32px, 6vw, 96px);
     padding: clamp(40px, 5vw, 72px) 0;
   }
   .fl-head {
@@ -123,13 +126,16 @@ const backTop = lang === 'ko' ? '맨 위로' : lang === 'zh' ? '返回顶部' : 
     margin: clamp(8px, 2vw, 24px) 0 clamp(20px, 3vw, 40px);
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(44px, 12vw, 220px);
+    font-size: clamp(44px, 11vw, 202px);
     line-height: 0.82;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.055em;
     white-space: nowrap;
     color: #14100a;
   }
-  .footer-wordmark span { color: #f4e9d2; font-size: 0.26em; vertical-align: top; }
+  .footer-wordmark span { color: #f4e9d2; font-size: 0.24em; vertical-align: 0.42em; margin-left: 0.04em; }
+  @media (max-width: 720px) {
+    .footer-wordmark { white-space: normal; font-size: clamp(40px, 15vw, 120px); line-height: 0.9; }
+  }
 
   .footer-legal {
     display: flex;
