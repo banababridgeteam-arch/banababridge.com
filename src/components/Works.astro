@@ -10,7 +10,7 @@ interface Props { lang?: Lang }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 
-const igImages = import.meta.glob<{ default: ImageMetadata }>('../assets/ig/*.jpg', { eager: true });
+const igImages = import.meta.glob<{ default: ImageMetadata }>('../assets/ig/*.{jpg,png}', { eager: true });
 const findImage = (name?: string) =>
   name ? (Object.entries(igImages).find(([p]) => p.endsWith(name))?.[1].default ?? null) : null;
 

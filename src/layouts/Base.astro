@@ -11,6 +11,7 @@ import {
   langHreflang,
   localizePath,
   useTranslations,
+  ui,
 } from '../i18n/ui';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -54,17 +55,40 @@ const baseJsonLd = [
     name: SITE.legalName,
     alternateName: [SITE.name, SITE.legalNameEn],
     url: SITE.url,
-    logo: `${SITE.url}/favicon.svg`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE.url}/favicon.svg`,
+      contentUrl: `${SITE.url}/logo.png`,
+    },
+    image: `${SITE.url}/og-default.jpg`,
     description: t.meta.desc,
+    slogan: '아티스트에겐 무대를, 브랜드에겐 시장을',
     foundingDate: SITE.foundingDate,
     email: SITE.email,
     ...(SITE.phone ? { telephone: SITE.phone } : {}),
+    knowsLanguage: ['ko', 'en', 'zh', 'vi'],
+    areaServed: ['KR', 'CN', 'JP', 'VN'],
     address: {
       '@type': 'PostalAddress',
       streetAddress: '대지로 43, 6층 606-746호',
       addressLocality: '용인시 수지구',
       addressRegion: '경기도',
       addressCountry: 'KR',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      email: SITE.email,
+      ...(SITE.phone ? { telephone: SITE.phone } : {}),
+      availableLanguage: ['Korean', 'English', 'Chinese', 'Vietnamese'],
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'BANABA BRIDGE 서비스',
+      itemListElement: ui.ko.services.items.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: s.title, description: s.desc },
+      })),
     },
     ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
   },
