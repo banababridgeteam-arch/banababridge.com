@@ -103,8 +103,11 @@ const nav = [
   }
   .nav { display: flex; gap: 30px; }
   .nav a {
-    font-size: 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
     font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--ink-dim);
     transition: color 0.2s ease;
   }
@@ -115,15 +118,17 @@ const nav = [
   .lang-switch { display: flex; align-items: center; gap: 2px; }
   .lang-switch a {
     padding: 5px 8px;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--muted);
-    border-radius: 6px;
+    border-radius: 0;
     transition: color 0.2s ease, background 0.2s ease;
   }
   .lang-switch a:hover { color: var(--ink); }
-  .lang-switch a.active { color: var(--gold); }
+  .lang-switch a.active { color: var(--lav); }
 
   .header-cta { padding: 10px 20px; font-size: 13px; }
 
